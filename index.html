@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZIVOR — החגורה האוטומטית לנשים | מתאימה לכל גוף</title>
+  <meta name="description" content="ZIVOR — החגורה האוטומטית לנשים. מכווננת את עצמה בדיוק לגוף שלך בלחיצה אחת. 4,800+ לקוחות מרוצות, 30 יום החזרה חינם.">
+  <link rel="canonical" href="https://zivor.co.il/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="ZIVOR — החגורה האוטומטית לנשים">
+  <meta property="og:description" content="חגורה אוטומטית שמתאימה לכל גוף. ₪149 בלבד.">
+  <meta property="og:image" content="https://placehold.co/1200x630/F2DDD1/1C1C1C?text=ZIVOR">
+  <meta property="og:type" content="product">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Product","name":"ZIVOR חגורה אוטומטית לנשים","description":"חגורה אוטומטית לנשים המכווננת את עצמה לגוף שלך","brand":{"@type":"Brand","name":"ZIVOR"},"offers":{"@type":"Offer","priceCurrency":"ILS","price":"149","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"4821"}}
+  </script>
+
+  <!-- META_PIXEL_ID -->
+  <!-- GTM_ID -->
+  <!-- TIKTOK_PIXEL_ID -->
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg:           '#FAF6F2',
+            surface:      '#F2DDD1',
+            'surf-deep':  '#E8C5B0',
+            accent:       '#C4957A',
+            'accent-d':   '#A87860',
+            'accent-l':   '#EDD9CA',
+            ink:          '#1C1C1C',
+            'ink-s':      '#6B5B53',
+            'ink-m':      '#9C8880',
+            border:       '#E8D5C8',
+          },
+          fontFamily: {
+            display: ['Heebo', 'sans-serif'],
+            body:    ['Heebo', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Heebo', sans-serif; background: #FAF6F2; color: #1C1C1C; overflow-x: hidden; }
+    h1,h2,h3,h4,h5,h6 { font-family: 'Heebo', sans-serif; }
+
+    /* ── Grain ── */
+    .grain::before {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(28px) } to { opacity:1; transform:translateY(0) } }
+    @keyframes fadeIn   { from { opacity:0 }                              to { opacity:1 }                          }
+    @keyframes pulseDot { 0%,100%{ transform:scale(1); opacity:1 }        50%{ transform:scale(1.5); opacity:.6 }  }
+    @keyframes marquee  { from { transform:translateX(0) }                 to { transform:translateX(-50%) }        }
+    @keyframes shimmer  { from { background-position:200% center }         to { background-position:-200% center }  }
+
+    .anim-fade-up { animation: fadeUp 0.72s cubic-bezier(.22,1,.36,1) both; }
+    .d1 { animation-delay:.1s } .d2 { animation-delay:.22s }
+    .d3 { animation-delay:.36s } .d4 { animation-delay:.5s }
+
+    .reveal { opacity:0; transform:translateY(30px);
+      transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+    .reveal.in { opacity:1; transform:translateY(0); }
+
+    /* ── Marquee ── */
+    .marquee-wrap { overflow:hidden; }
+    .marquee-track { display:flex; width:max-content; animation:marquee 22s linear infinite; }
+
+    /* ── Buttons ── */
+    .btn-ink {
+      background:#1C1C1C; color:#FAF6F2;
+      transition: background .18s ease, transform .15s ease, box-shadow .18s ease;
+    }
+    .btn-ink:hover  { background:#C4957A; transform:translateY(-2px); box-shadow:0 10px 28px -6px rgba(196,149,122,.5); }
+    .btn-ink:active { transform:translateY(0); }
+    .btn-ink:focus-visible { outline:2px solid #C4957A; outline-offset:3px; }
+
+    .btn-ring {
+      border:1.5px solid #1C1C1C; color:#1C1C1C; background:transparent;
+      transition: background .18s ease, color .18s ease, transform .15s ease;
+    }
+    .btn-ring:hover  { background:#1C1C1C; color:#FAF6F2; transform:translateY(-2px); }
+    .btn-ring:active { transform:translateY(0); }
+    .btn-ring:focus-visible { outline:2px solid #C4957A; outline-offset:3px; }
+
+    .btn-accent {
+      background:#C4957A; color:#fff;
+      transition: background .18s ease, transform .15s ease;
+    }
+    .btn-accent:hover  { background:#A87860; transform:translateY(-2px); }
+    .btn-accent:active { transform:translateY(0); }
+    .btn-accent:focus-visible { outline:2px solid #1C1C1C; outline-offset:3px; }
+
+    /* ── Gallery ── */
+    .thumb { cursor:pointer; transition: transform .2s ease, opacity .2s ease; }
+    .thumb:hover { opacity:.8; transform:scale(1.04); }
+    .thumb.on { outline:2px solid #C4957A; outline-offset:2px; }
+
+    /* ── Swatches ── */
+    .swatch {
+      width:28px; height:28px; border-radius:50%; cursor:pointer;
+      transition: transform .2s ease;
+    }
+    .swatch:hover { transform:scale(1.18); }
+    .swatch.on { outline:2.5px solid #C4957A; outline-offset:3px; }
+
+    /* ── FAQ ── */
+    .faq-body { max-height:0; overflow:hidden;
+      transition: max-height .38s cubic-bezier(.22,1,.36,1); }
+    .faq-body.open { max-height:320px; }
+    .faq-icon { transition: transform .28s ease; }
+    .faq-row.open .faq-icon { transform:rotate(45deg); }
+
+    /* ── Mobile sticky ── */
+    .mob-sticky { transform:translateY(110%);
+      transition: transform .32s cubic-bezier(.22,1,.36,1); }
+    .mob-sticky.show { transform:translateY(0); }
+
+    /* ── Popup ── */
+    .popup-bg { opacity:0; pointer-events:none;
+      transition: opacity .3s ease; }
+    .popup-bg.show { opacity:1; pointer-events:all; }
+    .popup-card { transform:translateY(20px) scale(.97); opacity:0;
+      transition: transform .36s cubic-bezier(.22,1,.36,1), opacity .36s ease; }
+    .popup-bg.show .popup-card { transform:translateY(0) scale(1); opacity:1; }
+
+    /* ── Star ── */
+    .star { color:#C4957A; }
+
+    /* ── Bundle cards ── */
+    .bundle-card { transition: border-color .18s ease, background .18s ease; }
+    .bundle-card.selected { border-color: #C4957A; background: rgba(196,149,122,.05); }
+    .bundle-radio { transition: border-color .18s ease; }
+    .bundle-card.selected .bundle-radio { border-color: #C4957A; }
+    .bundle-dot { transition: transform .18s cubic-bezier(.34,1.56,.64,1); }
+    .bundle-card.selected .bundle-dot { transform: scale(1); }
+    .bundle-card:not(.selected) .bundle-dot { transform: scale(0); }
+
+    /* ── Tab active ── */
+    .tab-btn { transition: background .2s ease, color .2s ease; }
+    .tab-btn.active { background: #1C1C1C; color: #FAF6F2; }
+    .tab-panel { transition: opacity .25s ease; }
+
+    /* ── WhatsApp ── */
+    .wa-btn { transition: transform .2s ease, box-shadow .2s ease; }
+    .wa-btn:hover { transform:scale(1.12); box-shadow:0 8px 24px -4px rgba(37,211,102,.45); }
+
+    /* ── Progress fill ── */
+    .pfill { transition: width .5s ease; }
+
+    /* ── Cart bounce ── */
+    @keyframes cartPop { 0%{transform:scale(1)} 40%{transform:scale(1.35)} 100%{transform:scale(1)} }
+    .cart-pop { animation: cartPop .28s ease; }
+  </style>
+</head>
+
+<body class="font-body bg-bg text-ink">
+
+<!-- ░░░ TOP BAR ░░░ -->
+<div class="bg-ink text-bg text-xs py-2 marquee-wrap" aria-label="הודעות">
+  <div class="marquee-track">
+    <span class="px-10 opacity-80">✦ משלוח חינם בקנייה מעל ₪299</span>
+    <span class="px-10 opacity-80">✦ 30 יום החזרה — ללא שאלות</span>
+    <span class="px-10 opacity-80">✦ תשלום מאובטח SSL</span>
+    <span class="px-10 opacity-80">✦ 4,800+ נשים כבר אוהבות אותה</span>
+    <span class="px-10 opacity-80">✦ משלוח חינם בקנייה מעל ₪299</span>
+    <span class="px-10 opacity-80">✦ 30 יום החזרה — ללא שאלות</span>
+    <span class="px-10 opacity-80">✦ תשלום מאובטח SSL</span>
+    <span class="px-10 opacity-80">✦ 4,800+ נשים כבר אוהבות אותה</span>
+  </div>
+</div>
+
+<!-- ░░░ NAV ░░░ -->
+<nav class="sticky top-0 z-50 bg-bg/95 backdrop-blur-md border-b border-border">
+  <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+
+    <!-- Start (RTL = right): cart + hamburger -->
+    <div class="flex items-center gap-4">
+      <button id="cart-btn" onclick="openCart()" class="relative p-2 hover:opacity-70 transition-opacity focus-visible:outline-2 focus-visible:outline-accent rounded-lg" aria-label="עגלת קניות">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span id="cart-count" class="absolute -top-0.5 -start-0.5 bg-accent text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold leading-none">0</span>
+      </button>
+      <button class="p-2 hover:opacity-70 transition-opacity md:hidden focus-visible:outline-2 focus-visible:outline-accent rounded-lg" aria-label="תפריט">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Logo (center) -->
+    <a href="/" class="font-display font-black text-2xl tracking-tight hover:opacity-75 transition-opacity focus-visible:outline-2 focus-visible:outline-accent rounded" style="letter-spacing:-.04em;">ZIVOR</a>
+
+    <!-- End (RTL = left): nav links -->
+    <div class="hidden md:flex items-center gap-6 text-sm font-medium text-ink-s">
+      <a href="#product"  class="hover:text-ink transition-colors">החגורה</a>
+      <a href="#reviews"  class="hover:text-ink transition-colors">ביקורות</a>
+      <a href="/shipping" class="hover:text-ink transition-colors">משלוחים</a>
+      <a href="#faq"      class="hover:text-ink transition-colors">שאלות</a>
+    </div>
+
+  </div>
+</nav>
+
+<!-- Free shipping progress -->
+<div class="bg-surface/50 border-b border-border py-2 px-4 text-center">
+  <p id="ship-txt" class="text-sm text-ink-s mb-1">הוסיפי ₪149 לקנייה כדי לקבל <strong class="text-ink">משלוח חינם</strong> 🚚</p>
+  <div class="max-w-xs mx-auto h-1.5 bg-border rounded-full overflow-hidden">
+    <div id="ship-bar" class="pfill h-full bg-accent rounded-full" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- ░░░ UNIFIED PRODUCT HERO ░░░ -->
+<section class="py-10 md:py-14 bg-bg relative overflow-hidden grain">
+  <!-- Subtle bg gradient -->
+  <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+    <div class="absolute top-0 end-0 w-[50%] h-[70%]" style="background:radial-gradient(ellipse at 70% 10%, #F2DDD1 0%, transparent 65%); opacity:.6;"></div>
+  </div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-5">
+    <div class="grid md:grid-cols-2 gap-10 lg:gap-16 items-start">
+
+      <!-- ── Gallery (sticky on desktop) ── -->
+      <div class="md:sticky md:top-20">
+        <!-- Main image -->
+        <div class="relative rounded-[1.5rem] overflow-hidden mb-3 shadow-[0_20px_56px_-12px_rgba(196,149,122,.38)]">
+          <img id="main-img" src="https://placehold.co/600x700/F2DDD1/C4957A?text=ZIVOR" alt="חגורה אוטומטית ZIVOR" class="w-full object-cover aspect-[5/6]" loading="eager" fetchpriority="high">
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/20 via-transparent to-transparent pointer-events-none"></div>
+          <!-- Live viewers -->
+          <div class="absolute top-4 start-4 bg-white/90 backdrop-blur-sm border border-border rounded-full px-3 py-1.5 flex items-center gap-1.5 text-xs text-ink-s shadow-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" style="animation:pulseDot 2s ease infinite;"></span>
+            <span id="live-v">21 אנשים צופות עכשיו</span>
+          </div>
+          <!-- Stock badge -->
+          <div class="absolute top-4 end-4 bg-accent text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">נשארו 7 בלבד!</div>
+        </div>
+        <!-- Thumbnails -->
+        <div class="grid grid-cols-4 gap-2">
+          <button class="thumb on rounded-xl overflow-hidden aspect-square" onclick="swImg(this,'https://placehold.co/600x700/F2DDD1/C4957A?text=ZIVOR')"><img src="https://placehold.co/150x150/F2DDD1/C4957A?text=1" alt="1" class="w-full h-full object-cover" loading="lazy"></button>
+          <button class="thumb rounded-xl overflow-hidden aspect-square" onclick="swImg(this,'https://placehold.co/600x700/E8C5B0/6B5B53?text=זווית+2')"><img src="https://placehold.co/150x150/E8C5B0/6B5B53?text=2" alt="2" class="w-full h-full object-cover" loading="lazy"></button>
+          <button class="thumb rounded-xl overflow-hidden aspect-square" onclick="swImg(this,'https://placehold.co/600x700/EDD9CA/A87860?text=פרט+3')"><img src="https://placehold.co/150x150/EDD9CA/A87860?text=3" alt="3" class="w-full h-full object-cover" loading="lazy"></button>
+          <button class="thumb rounded-xl overflow-hidden aspect-square" onclick="swImg(this,'https://placehold.co/600x700/FAF6F2/C4957A?text=לייפסטייל')"><img src="https://placehold.co/150x150/FAF6F2/C4957A?text=4" alt="4" class="w-full h-full object-cover" loading="lazy"></button>
+        </div>
+      </div>
+
+      <!-- ── Purchase Panel ── -->
+      <div class="flex flex-col gap-5">
+
+        <!-- Social proof pill -->
+        <div class="inline-flex items-center gap-2 bg-surface border border-border rounded-full px-4 py-1.5 text-sm text-ink-s self-start">
+          <span class="w-2 h-2 rounded-full bg-accent" style="animation:pulseDot 2s ease infinite;"></span>
+          4,800+ נשים כבר אוהבות אותה
+        </div>
+
+        <!-- Title -->
+        <div>
+          <h1 class="font-body font-black text-4xl md:text-5xl leading-none mb-3" style="letter-spacing:-.035em; line-height:1.1;">
+            סוף סוף<br>
+            <span style="color:#C4957A;">חגורה שמרגישה</span><br>
+            כמו בית
+          </h1>
+          <p class="text-ink-s text-[15px]" style="line-height:1.75;">הבאקל האוטומטי מכוונן את עצמו בדיוק לגוף שלך — בלחיצה אחת, בכל פעם.</p>
+        </div>
+
+        <!-- Stars -->
+        <div class="flex items-center gap-2">
+          <span class="star">★★★★★</span>
+          <span class="text-ink-s text-sm font-medium">4.9/5</span>
+          <a href="#reviews" class="text-sm text-ink-m underline underline-offset-2 hover:text-accent transition-colors">4,821 ביקורות</a>
+        </div>
+
+        <!-- ── Bundle picker ── -->
+        <div class="space-y-2">
+          <p class="text-xs font-bold text-ink-s uppercase tracking-widest flex items-center gap-1.5">🔥 קני יותר ושלמי פחות!</p>
+
+          <!-- 1 belt -->
+          <label class="bundle-card flex items-center gap-4 p-4 rounded-2xl border-2 border-border cursor-pointer hover:border-accent/50 transition-colors" onclick="selBundle(1)">
+            <div class="bundle-radio w-5 h-5 rounded-full border-2 border-border flex-shrink-0 flex items-center justify-center transition-colors">
+              <div class="bundle-dot w-2.5 h-2.5 rounded-full bg-accent scale-0 transition-transform"></div>
+            </div>
+            <div class="flex-1 min-w-0">
+              <span class="font-semibold text-sm">חגורה אחת</span>
+              <span class="text-xs text-ink-m me-2"> · חסכת ₪50</span>
+            </div>
+            <div class="text-start flex-shrink-0">
+              <span class="font-bold">₪149</span>
+              <span class="text-ink-m line-through text-xs ms-1">₪199</span>
+            </div>
+          </label>
+
+          <!-- 2 belts (default selected) -->
+          <label class="bundle-card selected flex items-center gap-4 p-4 rounded-2xl border-2 border-accent cursor-pointer bg-accent/5 transition-colors relative" onclick="selBundle(2)">
+            <div class="absolute -top-3 start-4 bg-ink text-bg text-[10px] font-bold px-2.5 py-1 rounded-full">הכי פופולרי ✦</div>
+            <div class="bundle-radio w-5 h-5 rounded-full border-2 border-accent flex-shrink-0 flex items-center justify-center">
+              <div class="bundle-dot w-2.5 h-2.5 rounded-full bg-accent scale-100 transition-transform"></div>
+            </div>
+            <div class="flex-1 min-w-0">
+              <span class="font-semibold text-sm">שתי חגורות</span>
+              <span class="text-xs text-ink-m me-2"> · חסכת ₪129</span>
+            </div>
+            <div class="text-start flex-shrink-0">
+              <span class="font-bold">₪269</span>
+              <span class="text-ink-m line-through text-xs ms-1">₪398</span>
+            </div>
+          </label>
+
+          <!-- 3 belts -->
+          <label class="bundle-card flex items-center gap-4 p-4 rounded-2xl border-2 border-border cursor-pointer hover:border-accent/50 transition-colors relative" onclick="selBundle(3)">
+            <div class="absolute -top-3 start-4 bg-accent/15 text-accent text-[10px] font-bold px-2.5 py-1 rounded-full">הכי משתלם 💰</div>
+            <div class="bundle-radio w-5 h-5 rounded-full border-2 border-border flex-shrink-0 flex items-center justify-center transition-colors">
+              <div class="bundle-dot w-2.5 h-2.5 rounded-full bg-accent scale-0 transition-transform"></div>
+            </div>
+            <div class="flex-1 min-w-0">
+              <span class="font-semibold text-sm">שלוש חגורות</span>
+              <span class="text-xs text-ink-m me-2"> · חסכת ₪218 + משלוח חינם</span>
+            </div>
+            <div class="text-start flex-shrink-0">
+              <span class="font-bold">₪379</span>
+              <span class="text-ink-m line-through text-xs ms-1">₪597</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- Color + size -->
+        <div class="flex items-center gap-6">
+          <div>
+            <p class="text-xs font-semibold text-ink-s mb-2">צבע: <span id="prod-color" class="text-ink">שחור</span></p>
+            <div class="flex gap-2.5">
+              <button class="swatch on" style="background:#1C1C1C;" data-color="שחור" onclick="selColor(this)" aria-label="שחור"></button>
+              <button class="swatch"    style="background:#D4BFA5;" data-color="בז׳"  onclick="selColor(this)" aria-label="בז'"></button>
+            </div>
+          </div>
+          <div>
+            <p class="text-xs font-semibold text-ink-s mb-2">מידה</p>
+            <button class="text-sm border border-border rounded-lg px-3 py-1.5 hover:border-accent transition-colors focus-visible:outline-2 focus-visible:outline-accent" onclick="toggleSizeModal()">אוניברסלית — XS–XL ↗</button>
+          </div>
+        </div>
+
+        <!-- Stock -->
+        <div class="flex items-center gap-2 text-sm">
+          <span class="w-2.5 h-2.5 rounded-full bg-orange-400 flex-shrink-0"></span>
+          <span class="font-medium text-orange-700">נשארו 7 יחידות בלבד — מהר!</span>
+        </div>
+
+        <!-- Add to cart -->
+        <div class="flex gap-3">
+          <button onclick="addToCart()" class="btn-ink flex-1 py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            הוסיפי לסל — <span id="hero-price">₪269</span>
+          </button>
+          <button class="btn-ring p-4 rounded-2xl" aria-label="שמרי למועדפים">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          </button>
+        </div>
+
+        <!-- Express checkout -->
+        <div>
+          <p class="text-xs text-ink-m text-center mb-2">— או תשלום מהיר —</p>
+          <div class="grid grid-cols-3 gap-2">
+            <button class="bg-black text-white text-xs font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-accent flex items-center justify-center gap-1">🍎 Apple Pay</button>
+            <button class="bg-white border border-border text-ink text-xs font-semibold py-3 rounded-xl hover:bg-surface transition-colors focus-visible:outline-2 focus-visible:outline-accent flex items-center justify-center gap-1">
+              <svg width="13" height="13" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              Google Pay
+            </button>
+            <button class="bg-[#00A0E4] text-white text-xs font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-accent">Bit 💙</button>
+          </div>
+        </div>
+
+        <!-- Trust mini -->
+        <div class="grid grid-cols-3 gap-3 p-3.5 bg-surface/50 rounded-xl border border-border text-center">
+          <div class="flex flex-col items-center gap-1">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span class="text-[10px] text-ink-s">תשלום מאובטח</span>
+          </div>
+          <div class="flex flex-col items-center gap-1">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="text-[10px] text-ink-s">30 יום החזרה</span>
+          </div>
+          <div class="flex flex-col items-center gap-1">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span class="text-[10px] text-ink-s">משלוח מהיר</span>
+          </div>
+        </div>
+
+      </div><!-- end purchase panel -->
+    </div><!-- end grid -->
+  </div><!-- end container -->
+</section>
+
+<!-- ░░░ TRUST BAR ░░░ -->
+<section class="bg-surface border-y border-border py-7">
+  <div class="max-w-5xl mx-auto px-5 grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div class="reveal flex flex-col items-center gap-1.5 text-center">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span class="font-semibold text-sm">תשלום מאובטח</span><span class="text-xs text-ink-m">Bit / Visa / PayPal</span>
+    </div>
+    <div class="reveal flex flex-col items-center gap-1.5 text-center" style="transition-delay:.1s">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="font-semibold text-sm">החזרה תוך 30 יום</span><span class="text-xs text-ink-m">ללא שאלות</span>
+    </div>
+    <div class="reveal flex flex-col items-center gap-1.5 text-center" style="transition-delay:.2s">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <span class="font-semibold text-sm">משלוח מהיר</span><span class="text-xs text-ink-m">5–14 ימי עסקים</span>
+    </div>
+    <div class="reveal flex flex-col items-center gap-1.5 text-center" style="transition-delay:.3s">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      <span class="font-semibold text-sm">תמיכה בעברית</span><span class="text-xs text-ink-m">א׳–ה׳ | 09–18</span>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ BENEFITS VISUAL ░░░ -->
+<section class="py-20 bg-bg overflow-hidden">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="text-center mb-14 reveal">
+      <span class="text-accent text-xs font-bold tracking-[.18em] uppercase mb-3 block">למה ZIVOR</span>
+      <h2 class="font-body font-black text-4xl md:text-5xl mb-4" style="letter-spacing:-.03em;">כשסטייל פוגש נוחות<br>ללא פשרות</h2>
+      <p class="text-ink-s text-lg max-w-xl mx-auto" style="line-height:1.7;">תשכחי מחגורות עם חורים שנהרסות כל כמה חודשים —<br>זה העתיד של החגורות.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8 items-center">
+      <!-- Right benefits -->
+      <div class="space-y-10 reveal">
+        <div class="flex flex-col items-end text-end gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-surface flex items-center justify-center shadow-[0_4px_16px_-4px_rgba(196,149,122,.25)]">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <div><h3 class="font-body font-bold text-lg mb-1">מתאימה לכל אירוע</h3><p class="text-ink-s text-sm" style="line-height:1.7;">בקניון עם חברה, יום ארוך במשרד, ערב רומנטי — חגורה אחת שעושה הכל.</p></div>
+        </div>
+        <div class="flex flex-col items-end text-end gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-surface flex items-center justify-center shadow-[0_4px_16px_-4px_rgba(196,149,122,.25)]">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+          </div>
+          <div><h3 class="font-body font-bold text-lg mb-1">איכות חומרים</h3><p class="text-ink-s text-sm" style="line-height:1.7;">עור PU פרמיום + באקל אבץ מוצק. לא עוד חגורה שנהרסת בשבוע הראשון.</p></div>
+        </div>
+      </div>
+
+      <!-- Center image -->
+      <div class="reveal order-first md:order-none" style="transition-delay:.1s">
+        <div class="relative rounded-[2rem] overflow-hidden shadow-[0_24px_60px_-12px_rgba(196,149,122,.4)]">
+          <img src="https://placehold.co/480x580/F2DDD1/C4957A?text=ZIVOR" alt="חגורה ZIVOR בשימוש" class="w-full object-cover aspect-[4/5]" loading="lazy">
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/30 via-transparent to-transparent pointer-events-none"></div>
+          <div class="absolute bottom-5 left-0 right-0 flex justify-center">
+            <span class="bg-white/90 backdrop-blur-sm text-ink text-xs font-bold px-4 py-2 rounded-full shadow-sm">כיוון מדויק עד 0.5 ס״מ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Left benefits -->
+      <div class="space-y-10 reveal" style="transition-delay:.2s">
+        <div class="flex flex-col items-start text-start gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-surface flex items-center justify-center shadow-[0_4px_16px_-4px_rgba(196,149,122,.25)]">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+          </div>
+          <div><h3 class="font-body font-bold text-lg mb-1">עיצוב ללא חורים</h3><p class="text-ink-s text-sm" style="line-height:1.7;">המנגנון האוטומטי מתאים לכל גזרה בדיוק של 0.5 ס״מ — גם בישיבה!</p></div>
+        </div>
+        <div class="flex flex-col items-start text-start gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-surface flex items-center justify-center shadow-[0_4px_16px_-4px_rgba(196,149,122,.25)]">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          </div>
+          <div><h3 class="font-body font-bold text-lg mb-1">נוחות מיטבית</h3><p class="text-ink-s text-sm" style="line-height:1.7;">לחצת לאחר ארוחה? לחצי על קצה הבאקל ושחרורי — נוחות אמיתית.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ COMPARISON TABLE ░░░ -->
+<section class="py-16 bg-surface/30 border-y border-border">
+  <div class="max-w-3xl mx-auto px-5">
+    <div class="text-center mb-10 reveal">
+      <h2 class="font-body font-black text-4xl" style="letter-spacing:-.03em;">למה לבחור דווקא ב-ZIVOR?</h2>
+    </div>
+
+    <div class="reveal overflow-hidden rounded-2xl border border-border shadow-[0_8px_32px_-8px_rgba(196,149,122,.2)]">
+      <!-- Header row -->
+      <div class="grid grid-cols-3 bg-ink text-bg">
+        <div class="col-span-1 px-5 py-4 text-sm font-bold text-bg/60">תכונה</div>
+        <div class="px-5 py-4 text-sm font-bold text-center text-bg/60">אחרות</div>
+        <div class="px-5 py-4 text-sm font-bold text-center bg-accent/20 text-accent tracking-wide">ZIVOR</div>
+      </div>
+
+      <!-- Rows -->
+      <div class="divide-y divide-border bg-white">
+        <div class="grid grid-cols-3 items-center">
+          <div class="px-5 py-4 text-sm font-semibold">מנגנון אוטומטי ללא חורים</div>
+          <div class="px-5 py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
+          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+        </div>
+        <div class="grid grid-cols-3 items-center bg-surface/30">
+          <div class="px-5 py-4 text-sm font-semibold">מתאימה לכל המידות</div>
+          <div class="px-5 py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
+          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+        </div>
+        <div class="grid grid-cols-3 items-center">
+          <div class="px-5 py-4 text-sm font-semibold">חגורה אחת, למגוון שימושים</div>
+          <div class="px-5 py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
+          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+        </div>
+        <div class="grid grid-cols-3 items-center bg-surface/30">
+          <div class="px-5 py-4 text-sm font-semibold">נוחות ללא פשרות</div>
+          <div class="px-5 py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
+          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+        </div>
+        <div class="grid grid-cols-3 items-center">
+          <div class="px-5 py-4 text-sm font-semibold">עשויה מחומרים איכותיים</div>
+          <div class="px-5 py-4 flex justify-center"><span class="text-ink-m text-xl font-bold">✓</span></div>
+          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+        </div>
+        <div class="grid grid-cols-3 items-center bg-surface/30">
+          <div class="px-5 py-4 text-sm font-semibold">עיצוב יוקרתי שגורר מחמאות</div>
+          <div class="px-5 py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
+          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+        </div>
+        <div class="grid grid-cols-3 items-center">
+          <div class="px-5 py-4 text-sm font-semibold">30 יום החזרה ללא שאלות</div>
+          <div class="px-5 py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
+          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+        </div>
+      </div>
+
+      <!-- Footer CTA -->
+      <div class="bg-ink px-5 py-5 text-center">
+        <button onclick="addToCart()" class="bg-accent hover:bg-accent-d text-white font-bold px-8 py-3.5 rounded-full text-sm transition-colors focus-visible:outline-2 focus-visible:outline-white">
+          הוסיפי לסל עכשיו — <span id="table-price">₪269</span>
+        </button>
+        <p class="text-bg/40 text-xs mt-2">30 יום החזרה · תשלום מאובטח</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ BENEFITS ░░░ -->
+<section class="py-20 bg-ink text-bg relative overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 20% 60%, rgba(196,149,122,.12) 0%, transparent 55%);"></div>
+  <div class="max-w-5xl mx-auto px-5 relative z-10">
+    <div class="text-center mb-14 reveal">
+      <h2 class="font-display font-black text-4xl text-bg" style="letter-spacing:-.03em;">ZIVOR לעומת חגורה רגילה</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="reveal">
+        <h3 class="text-xs font-bold tracking-[.18em] uppercase text-ink-m mb-6">חגורה רגילה ✗</h3>
+        <ul class="space-y-3.5 text-bg/65 text-[15px]" style="line-height:1.65;">
+          <li class="flex items-start gap-3"><span class="text-red-400 mt-0.5 flex-shrink-0">✗</span>חורים שאף פעם לא מסתדרים למידה שלך</li>
+          <li class="flex items-start gap-3"><span class="text-red-400 mt-0.5 flex-shrink-0">✗</span>מחט שורטת ומשאירה צלקת על הרצועה</li>
+          <li class="flex items-start gap-3"><span class="text-red-400 mt-0.5 flex-shrink-0">✗</span>מפסיקה לתפקד אחרי כמה חודשים</li>
+          <li class="flex items-start gap-3"><span class="text-red-400 mt-0.5 flex-shrink-0">✗</span>לא נוחה בנסיעה ארוכה או אחרי ארוחה</li>
+          <li class="flex items-start gap-3"><span class="text-red-400 mt-0.5 flex-shrink-0">✗</span>לוקח זמן לסגור ולפתוח</li>
+        </ul>
+      </div>
+      <div class="reveal" style="transition-delay:.15s">
+        <h3 class="text-xs font-bold tracking-[.18em] uppercase text-accent mb-6">ZIVOR אוטומטית ✓</h3>
+        <ul class="space-y-3.5 text-bg text-[15px]" style="line-height:1.65;">
+          <li class="flex items-start gap-3"><span class="text-accent mt-0.5 flex-shrink-0">✓</span>כיוון מדויק לכל מידה — בלי חורים בכלל</li>
+          <li class="flex items-start gap-3"><span class="text-accent mt-0.5 flex-shrink-0">✓</span>הרצועה שלמה לנצח, אין שריטות</li>
+          <li class="flex items-start gap-3"><span class="text-accent mt-0.5 flex-shrink-0">✓</span>מתכת פרמיום שמחזיקה שנים רבות</li>
+          <li class="flex items-start gap-3"><span class="text-accent mt-0.5 flex-shrink-0">✓</span>מתרחבת ומתכווצת בנוחות לאורך היום</li>
+          <li class="flex items-start gap-3"><span class="text-accent mt-0.5 flex-shrink-0">✓</span>שנייה לסגור, שנייה לפתוח</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ REVIEWS ░░░ -->
+<section id="reviews" class="py-20 max-w-5xl mx-auto px-5">
+  <div class="text-center mb-12 reveal">
+    <div class="flex items-center justify-center gap-3 mb-2">
+      <span class="star text-3xl">★★★★★</span>
+      <span class="font-display font-black text-5xl">4.9</span>
+    </div>
+    <p class="text-ink-m">מבוסס על 4,821 ביקורות</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid md:grid-cols-5 gap-4 mb-12 reveal">
+    <div class="md:col-span-2 bg-surface rounded-2xl p-5 border border-border space-y-2">
+      <div class="flex items-center gap-2 text-sm"><span class="w-3 text-center text-ink-s">5</span><span class="star text-xs">★</span><div class="flex-1 h-1.5 bg-border rounded-full overflow-hidden"><div class="h-full bg-accent rounded-full pfill" style="width:88%"></div></div><span class="text-xs text-ink-m w-6 text-start">88%</span></div>
+      <div class="flex items-center gap-2 text-sm"><span class="w-3 text-center text-ink-s">4</span><span class="star text-xs">★</span><div class="flex-1 h-1.5 bg-border rounded-full overflow-hidden"><div class="h-full bg-accent rounded-full pfill" style="width:8%"></div></div><span class="text-xs text-ink-m w-6 text-start">8%</span></div>
+      <div class="flex items-center gap-2 text-sm"><span class="w-3 text-center text-ink-s">3</span><span class="star text-xs">★</span><div class="flex-1 h-1.5 bg-border rounded-full overflow-hidden"><div class="h-full bg-accent rounded-full pfill" style="width:3%"></div></div><span class="text-xs text-ink-m w-6 text-start">3%</span></div>
+      <div class="flex items-center gap-2 text-sm"><span class="w-3 text-center text-ink-s">2</span><span class="star text-xs">★</span><div class="flex-1 h-1.5 bg-border rounded-full overflow-hidden"><div class="h-full bg-accent rounded-full pfill" style="width:1%"></div></div><span class="text-xs text-ink-m w-6 text-start">1%</span></div>
+      <div class="flex items-center gap-2 text-sm"><span class="w-3 text-center text-ink-s">1</span><span class="star text-xs">★</span><div class="flex-1 h-1.5 bg-border rounded-full overflow-hidden"><div class="h-full bg-accent rounded-full pfill" style="width:0%"></div></div><span class="text-xs text-ink-m w-6 text-start">0%</span></div>
+    </div>
+    <div class="md:col-span-3 grid grid-cols-2 gap-3">
+      <div class="bg-surface rounded-xl p-4 border border-border text-center"><div class="font-display font-black text-3xl text-accent">97%</div><div class="text-xs text-ink-m mt-1">ממליצות לחברה</div></div>
+      <div class="bg-surface rounded-xl p-4 border border-border text-center"><div class="font-display font-black text-3xl text-accent">94%</div><div class="text-xs text-ink-m mt-1">קנו שוב</div></div>
+      <div class="bg-surface rounded-xl p-4 border border-border text-center"><div class="font-display font-black text-3xl text-accent">&lt;1%</div><div class="text-xs text-ink-m mt-1">שיעור החזרה</div></div>
+      <div class="bg-surface rounded-xl p-4 border border-border text-center"><div class="font-display font-black text-3xl text-accent">4,800+</div><div class="text-xs text-ink-m mt-1">לקוחות מרוצות</div></div>
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div class="grid md:grid-cols-3 gap-5">
+    <div class="reveal bg-white border border-border rounded-2xl p-5 shadow-[0_2px_16px_-6px_rgba(196,149,122,.2)]">
+      <div class="flex items-center gap-3 mb-3">
+        <img src="https://placehold.co/44x44/F2DDD1/C4957A?text=ש" class="w-11 h-11 rounded-full" loading="lazy" alt="שירה">
+        <div><p class="font-semibold text-sm">שירה ל.</p><span class="star text-xs">★★★★★</span></div>
+      </div>
+      <p class="text-ink-s text-sm" style="line-height:1.75;">״קניתי לפני חודש ומאז לא חזרתי לחגורה רגילה. הבאקל עובד מושלם, מתאים בדיוק לגוף שלי. ממליצה בחום לכולן!״</p>
+      <p class="text-xs text-ink-m mt-3">✓ קנייה מאומתת</p>
+    </div>
+    <div class="reveal bg-white border border-border rounded-2xl p-5 shadow-[0_2px_16px_-6px_rgba(196,149,122,.2)]" style="transition-delay:.1s">
+      <div class="flex items-center gap-3 mb-3">
+        <img src="https://placehold.co/44x44/EDD9CA/6B5B53?text=מ" class="w-11 h-11 rounded-full" loading="lazy" alt="מיכל">
+        <div><p class="font-semibold text-sm">מיכל כ.</p><span class="star text-xs">★★★★★</span></div>
+      </div>
+      <p class="text-ink-s text-sm" style="line-height:1.75;">״הזמנתי שתיים — שחורה ובז׳. האיכות מדהימה ביחס למחיר. סוף סוף חגורה שמסתגלת לי ולא להיפך!״</p>
+      <p class="text-xs text-ink-m mt-3">✓ קנייה מאומתת</p>
+    </div>
+    <div class="reveal bg-white border border-border rounded-2xl p-5 shadow-[0_2px_16px_-6px_rgba(196,149,122,.2)]" style="transition-delay:.2s">
+      <div class="flex items-center gap-3 mb-3">
+        <img src="https://placehold.co/44x44/E8C5B0/A87860?text=נ" class="w-11 h-11 rounded-full" loading="lazy" alt="נועה">
+        <div><p class="font-semibold text-sm">נועה א.</p><span class="star text-xs">★★★★★</span></div>
+      </div>
+      <p class="text-ink-s text-sm" style="line-height:1.75;">״האריזה יפהפייה ממש כמו מתנה לעצמי. קיבלתי תוך שבוע. מאז קנתה גם אמא שלי ואחותי!״</p>
+      <p class="text-xs text-ink-m mt-3">✓ קנייה מאומתת</p>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ BUNDLES ░░░ -->
+<section class="py-16 bg-surface/40 border-y border-border">
+  <div class="max-w-5xl mx-auto px-5">
+    <div class="text-center mb-10 reveal">
+      <span class="text-accent text-xs font-bold tracking-[.18em] uppercase mb-3 block">חסכי יותר</span>
+      <h2 class="font-display font-black text-4xl" style="letter-spacing:-.03em;">חבילות מיוחדות</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-5">
+
+      <!-- 1 -->
+      <div class="reveal bg-white border border-border rounded-2xl p-6 flex flex-col">
+        <div class="flex-1">
+          <h3 class="font-display font-bold text-xl mb-1">חגורה אחת</h3>
+          <p class="text-ink-m text-sm mb-5">הניסיון הראשון</p>
+          <div class="flex items-baseline gap-2 mb-5"><span class="font-black text-3xl">₪149</span><span class="text-ink-m line-through">₪199</span></div>
+          <ul class="space-y-2 text-sm text-ink-s mb-6">
+            <li class="flex items-center gap-2"><span class="text-accent">✓</span>חגורה אחת לבחירה</li>
+            <li class="flex items-center gap-2"><span class="text-accent">✓</span>משלוח ₪29</li>
+            <li class="flex items-center gap-2"><span class="text-accent">✓</span>30 יום החזרה</li>
+          </ul>
+        </div>
+        <button onclick="addToCart(1)" class="btn-ring w-full py-3 rounded-xl font-semibold text-sm">בחרי</button>
+      </div>
+
+      <!-- 2 (popular) -->
+      <div class="reveal bg-ink text-bg border-2 border-accent rounded-2xl p-6 flex flex-col relative" style="transition-delay:.1s">
+        <div class="absolute -top-3.5 left-0 right-0 flex justify-center">
+          <span class="bg-accent text-white text-xs font-bold px-4 py-1 rounded-full">הכי פופולרי ✦</span>
+        </div>
+        <div class="flex-1">
+          <h3 class="font-display font-bold text-xl mb-1 text-bg">שתי חגורות</h3>
+          <p class="text-bg/55 text-sm mb-5">שמרי לצבעים שונים</p>
+          <div class="flex items-baseline gap-2 mb-5"><span class="font-black text-3xl text-bg">₪269</span><span class="text-bg/45 line-through">₪398</span></div>
+          <ul class="space-y-2 text-sm text-bg/75 mb-6">
+            <li class="flex items-center gap-2"><span class="text-accent">✓</span>שתי חגורות לבחירה</li>
+            <li class="flex items-center gap-2"><span class="text-accent">✓</span>משלוח חינם</li>
+            <li class="flex items-center gap-2"><span class="text-accent">✓</span>חסכת ₪129</li>
+            <li class="flex items-center gap-2"><span class="text-accent">✓</span>30 יום החזרה</li>
+          </ul>
+        </div>
+        <button onclick="addToCart(2)" class="btn-accent w-full py-3 rounded-xl font-semibold text-sm">
+          בחרי — חסכי ₪129
+        </button>
+      </div>
+
+      <!-- 3 -->
+      <div class="reveal bg-white border border-border rounded-2xl p-6 flex flex-col" style="transition-delay:.2s">
+        <div class="flex-1">
+          <h3 class="font-display font-bold text-xl mb-1">שלוש חגורות</h3>
+          <p class="text-ink-m text-sm mb-5">מתנה לחברות / משפחה</p>
+          <div class="flex items-baseline gap-2 mb-5"><span class="font-black text-3xl">₪379</span><span class="text-ink-m line-through">₪597</span></div>
+          <ul class="space-y-2 text-sm text-ink-s mb-6">
+            <li class="flex items-center gap-2"><span class="text-accent">✓</span>שלוש חגורות לבחירה</li>
+            <li class="flex items-center gap-2"><span class="text-accent">✓</span>משלוח חינם + עדיפות</li>
+            <li class="flex items-center gap-2"><span class="text-accent">✓</span>חסכת ₪218</li>
+            <li class="flex items-center gap-2"><span class="text-accent">✓</span>30 יום החזרה</li>
+          </ul>
+        </div>
+        <button onclick="addToCart(3)" class="btn-ring w-full py-3 rounded-xl font-semibold text-sm">בחרי</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ FAQ ░░░ -->
+<section id="faq" class="py-20 max-w-3xl mx-auto px-5">
+  <div class="text-center mb-12 reveal">
+    <h2 class="font-display font-black text-4xl" style="letter-spacing:-.03em;">שאלות נפוצות</h2>
+  </div>
+  <div class="space-y-3">
+
+    <div class="faq-row reveal bg-white border border-border rounded-2xl overflow-hidden">
+      <button class="w-full text-start px-6 py-4 flex items-center justify-between gap-4 hover:bg-surface/30 transition-colors focus-visible:outline-2 focus-visible:outline-accent" onclick="toggleFaq(this)">
+        <span class="font-semibold text-[15px]">לאיזה מידות מתאימה החגורה?</span>
+        <span class="faq-icon text-xl text-accent flex-shrink-0">+</span>
+      </button>
+      <div class="faq-body px-6 text-ink-s text-sm" style="line-height:1.75;"><div class="pb-4">מתאימה להיקף מותניים 60–95 ס״מ (מידות XS–XL). הרצועה ניתנת לחיתוך עצמי לפי הצורך.</div></div>
+    </div>
+
+    <div class="faq-row reveal bg-white border border-border rounded-2xl overflow-hidden" style="transition-delay:.05s">
+      <button class="w-full text-start px-6 py-4 flex items-center justify-between gap-4 hover:bg-surface/30 transition-colors focus-visible:outline-2 focus-visible:outline-accent" onclick="toggleFaq(this)">
+        <span class="font-semibold text-[15px]">כמה זמן לוקח המשלוח?</span>
+        <span class="faq-icon text-xl text-accent flex-shrink-0">+</span>
+      </button>
+      <div class="faq-body px-6 text-ink-s text-sm" style="line-height:1.75;"><div class="pb-4">משלוח רגיל: 7–14 ימי עסקים. משלוח מהיר (בתשלום): 5–7 ימים. נשלח מחסן בחו״ל.</div></div>
+    </div>
+
+    <div class="faq-row reveal bg-white border border-border rounded-2xl overflow-hidden" style="transition-delay:.1s">
+      <button class="w-full text-start px-6 py-4 flex items-center justify-between gap-4 hover:bg-surface/30 transition-colors focus-visible:outline-2 focus-visible:outline-accent" onclick="toggleFaq(this)">
+        <span class="font-semibold text-[15px]">מה מדיניות ההחזרה?</span>
+        <span class="faq-icon text-xl text-accent flex-shrink-0">+</span>
+      </button>
+      <div class="faq-body px-6 text-ink-s text-sm" style="line-height:1.75;"><div class="pb-4">30 יום החזרה מלאה ללא שאלות. לא אהבת — מחזירה ומקבלת החזר כספי מלא.</div></div>
+    </div>
+
+    <div class="faq-row reveal bg-white border border-border rounded-2xl overflow-hidden" style="transition-delay:.15s">
+      <button class="w-full text-start px-6 py-4 flex items-center justify-between gap-4 hover:bg-surface/30 transition-colors focus-visible:outline-2 focus-visible:outline-accent" onclick="toggleFaq(this)">
+        <span class="font-semibold text-[15px]">האם הבאקל עמיד לאורך זמן?</span>
+        <span class="faq-icon text-xl text-accent flex-shrink-0">+</span>
+      </button>
+      <div class="faq-body px-6 text-ink-s text-sm" style="line-height:1.75;"><div class="pb-4">הבאקל מתכת אנטי-חלודה, עמיד לשנים. בדקנו מעל 10,000 מחזורי פתיחה-סגירה ללא שחיקה.</div></div>
+    </div>
+
+    <div class="faq-row reveal bg-white border border-border rounded-2xl overflow-hidden" style="transition-delay:.2s">
+      <button class="w-full text-start px-6 py-4 flex items-center justify-between gap-4 hover:bg-surface/30 transition-colors focus-visible:outline-2 focus-visible:outline-accent" onclick="toggleFaq(this)">
+        <span class="font-semibold text-[15px]">אילו אמצעי תשלום מקבלים?</span>
+        <span class="faq-icon text-xl text-accent flex-shrink-0">+</span>
+      </button>
+      <div class="faq-body px-6 text-ink-s text-sm" style="line-height:1.75;"><div class="pb-4">Visa, Mastercard, Apple Pay, Google Pay, PayPal, וגם Bit. כל המחירים כוללים מע״מ.</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ░░░ FOOTER ░░░ -->
+<footer class="bg-ink text-bg/75 pt-14 pb-8">
+  <div class="max-w-5xl mx-auto px-5">
+    <div class="grid md:grid-cols-4 gap-8 mb-10">
+      <div class="md:col-span-1">
+        <h2 class="font-display font-black text-2xl text-bg mb-2" style="letter-spacing:-.04em;">ZIVOR</h2>
+        <p class="text-bg/50 text-sm mb-4" style="line-height:1.75;">חגורה אוטומטית לנשים — מכווננת את עצמה לגוף שלך.</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="text-[10px] px-2 py-1 rounded border border-bg/20 text-bg/60">VISA</span>
+          <span class="text-[10px] px-2 py-1 rounded border border-bg/20 text-bg/60">Mastercard</span>
+          <span class="text-[10px] px-2 py-1 rounded border border-bg/20 text-bg/60">Bit</span>
+          <span class="text-[10px] px-2 py-1 rounded border border-bg/20 text-bg/60">PayPal</span>
+          <span class="text-[10px] px-2 py-1 rounded border border-bg/20 text-bg/60">Apple Pay</span>
+        </div>
+      </div>
+      <div>
+        <h4 class="text-bg text-xs font-bold tracking-[.15em] uppercase mb-4">עזרה</h4>
+        <ul class="space-y-2.5 text-sm">
+          <li><a href="/shipping" class="hover:text-bg transition-colors">מדיניות משלוחים</a></li>
+          <li><a href="/returns"  class="hover:text-bg transition-colors">מדיניות החזרה</a></li>
+          <li><a href="/track"    class="hover:text-bg transition-colors">מעקב הזמנה</a></li>
+          <li><a href="#faq"      class="hover:text-bg transition-colors">שאלות נפוצות</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-bg text-xs font-bold tracking-[.15em] uppercase mb-4">חברה</h4>
+        <ul class="space-y-2.5 text-sm">
+          <li><a href="/terms"   class="hover:text-bg transition-colors">תקנון</a></li>
+          <li><a href="/privacy" class="hover:text-bg transition-colors">מדיניות פרטיות</a></li>
+          <li><a href="/contact" class="hover:text-bg transition-colors">צור קשר</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-bg text-xs font-bold tracking-[.15em] uppercase mb-4">צרי קשר</h4>
+        <ul class="space-y-2.5 text-sm">
+          <li><a href="tel:+972501234567" class="hover:text-bg transition-colors flex items-center gap-2">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.5a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .84h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            050-123-4567
+          </a></li>
+          <li class="text-bg/40 text-xs">א׳–ה׳ | 09:00–18:00</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-bg/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-bg/35">
+      <p>© 2025 ZIVOR. כל הזכויות שמורות.</p>
+      <p class="flex items-center gap-1.5">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        תשלום מאובטח SSL
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ░░░ FLOATING WHATSAPP ░░░ -->
+<a href="https://wa.me/972501234567?text=היי, אני מעוניינת בחגורה ZIVOR"
+   target="_blank" rel="noopener noreferrer"
+   class="wa-btn fixed bottom-6 end-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_6px_20px_-4px_rgba(37,211,102,.5)] focus-visible:outline-2 focus-visible:outline-white"
+   aria-label="שלחי הודעה ב-WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+  </svg>
+</a>
+
+<!-- ░░░ STICKY MOBILE CTA ░░░ -->
+<div id="mob-cta" class="mob-sticky fixed bottom-0 inset-x-0 z-50 md:hidden bg-bg/98 backdrop-blur-md border-t border-border px-4 py-3 flex items-center gap-3">
+  <div class="flex-1 min-w-0">
+    <p class="text-xs text-ink-s truncate">חגורה אוטומטית ZIVOR</p>
+    <p class="font-bold text-base leading-none">₪149 <span class="text-ink-m line-through text-xs font-normal">₪199</span></p>
+  </div>
+  <button onclick="addToCart()" class="btn-ink px-6 py-3 rounded-xl font-semibold text-sm whitespace-nowrap flex-shrink-0">
+    הוסיפי לסל
+  </button>
+</div>
+
+<!-- ░░░ SIZE MODAL ░░░ -->
+<div id="size-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-ink/40 backdrop-blur-sm" onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="bg-bg rounded-2xl max-w-md w-full p-6 shadow-[0_24px_64px_-12px_rgba(28,28,28,.35)] border border-border">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="font-display font-bold text-xl">טבלת מידות ZIVOR</h3>
+      <button onclick="toggleSizeModal()" class="text-ink-m hover:text-ink transition-colors p-1 focus-visible:outline-2 focus-visible:outline-accent rounded">✕</button>
+    </div>
+    <p class="text-sm text-ink-s mb-4" style="line-height:1.75;">מידה אוניברסלית. הרצועה ניתנת לחיתוך לפי הצורך.</p>
+    <table class="w-full text-sm border-collapse">
+      <thead><tr class="bg-surface"><th class="border border-border px-3 py-2 text-start font-semibold">מידה</th><th class="border border-border px-3 py-2 text-start font-semibold">היקף מותניים (ס״מ)</th></tr></thead>
+      <tbody class="text-ink-s">
+        <tr><td class="border border-border px-3 py-2">XS</td><td class="border border-border px-3 py-2">60–67</td></tr>
+        <tr class="bg-surface/40"><td class="border border-border px-3 py-2">S</td><td class="border border-border px-3 py-2">67–73</td></tr>
+        <tr><td class="border border-border px-3 py-2">M</td><td class="border border-border px-3 py-2">73–80</td></tr>
+        <tr class="bg-surface/40"><td class="border border-border px-3 py-2">L</td><td class="border border-border px-3 py-2">80–87</td></tr>
+        <tr><td class="border border-border px-3 py-2">XL</td><td class="border border-border px-3 py-2">87–95</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ░░░ CART DRAWER ░░░ -->
+<div id="cart-overlay" class="fixed inset-0 z-[80] pointer-events-none">
+  <!-- Backdrop -->
+  <div id="cart-backdrop" onclick="closeCart()" class="absolute inset-0 bg-ink/40 backdrop-blur-sm opacity-0" style="transition: opacity .3s ease; pointer-events:none;"></div>
+
+  <!-- Drawer slides in from the right -->
+  <div id="cart-drawer" class="absolute top-0 right-0 h-full w-full max-w-sm bg-bg shadow-[0_0_60px_-12px_rgba(28,28,28,.4)] flex flex-col" style="transform: translateX(110%); transition: transform .35s cubic-bezier(.22,1,.36,1);">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-5 py-4 border-b border-border flex-shrink-0">
+      <h2 class="font-body font-bold text-lg">עגלת הקניות</h2>
+      <button onclick="closeCart()" class="p-2 hover:opacity-60 transition-opacity focus-visible:outline-2 focus-visible:outline-accent rounded-lg" aria-label="סגרי עגלה">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Items area -->
+    <div id="cart-items" class="flex-1 overflow-y-auto px-5 py-4">
+      <!-- Empty state -->
+      <div id="cart-empty" class="flex flex-col items-center justify-center h-full text-center py-16">
+        <div class="w-16 h-16 rounded-2xl bg-surface flex items-center justify-center mb-4">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        </div>
+        <p class="font-semibold text-ink mb-1">העגלה ריקה</p>
+        <p class="text-ink-m text-sm mb-5">הוסיפי פריטים כדי להמשיך</p>
+        <button onclick="closeCart()" class="btn-ink px-6 py-2.5 rounded-full text-sm font-semibold">המשיכי לקנות</button>
+      </div>
+
+      <!-- Items list (populated by JS) -->
+      <div id="cart-list" class="hidden space-y-3"></div>
+    </div>
+
+    <!-- Footer (only when items exist) -->
+    <div id="cart-footer" class="hidden border-t border-border px-5 py-5 flex-shrink-0">
+      <!-- Free shipping progress -->
+      <div id="cart-ship-note" class="text-xs text-ink-s text-center mb-3"></div>
+      <div class="h-1.5 bg-border rounded-full overflow-hidden mb-4">
+        <div id="cart-ship-bar" class="pfill h-full bg-accent rounded-full" style="width:0%"></div>
+      </div>
+
+      <!-- Subtotal -->
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-ink-s text-sm">סה״כ (כולל מע״מ)</span>
+        <span id="cart-total" class="font-bold text-xl">₪0</span>
+      </div>
+
+      <!-- Payment icons -->
+      <div class="flex items-center justify-center gap-2 mb-4">
+        <span class="text-[10px] text-ink-m px-1.5 py-0.5 border border-border rounded">VISA</span>
+        <span class="text-[10px] text-ink-m px-1.5 py-0.5 border border-border rounded">MC</span>
+        <span class="text-[10px] text-ink-m px-1.5 py-0.5 border border-border rounded">Bit</span>
+        <span class="text-[10px] text-ink-m px-1.5 py-0.5 border border-border rounded">PayPal</span>
+      </div>
+
+      <a href="/checkout" class="btn-ink w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2 text-center">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        לתשלום מאובטח
+      </a>
+      <p class="text-center text-xs text-ink-m mt-2">30 יום החזרה ללא שאלות</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ░░░ EXIT-INTENT POPUP ░░░ -->
+<div id="exit-popup" class="popup-bg fixed inset-0 z-[70] flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
+  <div class="popup-card bg-bg rounded-2xl max-w-sm w-full overflow-hidden border border-border shadow-[0_24px_64px_-12px_rgba(28,28,28,.4)]">
+    <div class="bg-surface px-6 py-7 text-center">
+      <p class="text-ink-m text-sm mb-2">רגע לפני שהולכת...</p>
+      <h3 class="font-display font-black text-4xl mb-1" style="letter-spacing:-.04em; color:#C4957A;">10% הנחה</h3>
+      <p class="text-ink-s text-sm">רק לך, רק עכשיו</p>
+    </div>
+    <div class="p-6">
+      <form onsubmit="submitPopup(event)" class="flex flex-col gap-3">
+        <input type="email" placeholder="המייל שלך" dir="ltr"
+          class="w-full border border-border rounded-xl px-4 py-3 text-sm bg-bg focus:outline-none focus:border-accent transition-colors" required>
+        <button type="submit" class="btn-ink w-full py-3 rounded-xl font-semibold text-sm">
+          שלחי לי את הקוד ←
+        </button>
+      </form>
+      <button onclick="document.getElementById('exit-popup').classList.remove('show')"
+        class="w-full text-center text-xs text-ink-m mt-3 hover:text-ink transition-colors focus-visible:outline-2 focus-visible:outline-accent rounded">
+        לא תודה, אני מוותרת על ההנחה
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ░░░ SCRIPTS ░░░ -->
+<script>
+  /* ── Cart state ── */
+  const PRICE = 149;
+  const SHIP_THRESHOLD = 299;
+  let cartItems = []; // { name, color, price, qty }
+
+  function getSelectedColor() {
+    const s = document.querySelector('#product .swatch.on');
+    return s ? s.dataset.color : 'שחור';
+  }
+
+  function addToCart(qty) {
+    if (qty === undefined) qty = BUNDLE[activeBundle].qty;
+    const color = getSelectedColor();
+    const name = 'חגורה אוטומטית ZIVOR';
+    const existing = cartItems.find(i => i.name === name && i.color === color);
+    if (existing) existing.qty += qty;
+    else cartItems.push({ name, color, price: PRICE, qty });
+
+    updateCartUI();
+    openCart();
+
+    /* Pixel */
+    if (typeof fbq !== 'undefined') fbq('track', 'AddToCart', { value: PRICE * qty, currency: 'ILS' });
+  }
+
+  function removeFromCart(idx) {
+    cartItems.splice(idx, 1);
+    updateCartUI();
+  }
+
+  function changeQty(idx, delta) {
+    cartItems[idx].qty += delta;
+    if (cartItems[idx].qty <= 0) cartItems.splice(idx, 1);
+    updateCartUI();
+  }
+
+  function updateCartUI() {
+    const total = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
+    const totalQty = cartItems.reduce((s, i) => s + i.qty, 0);
+
+    /* Nav badge */
+    document.getElementById('cart-count').textContent = totalQty;
+    const btn = document.getElementById('cart-btn');
+    btn.classList.add('cart-pop');
+    btn.addEventListener('animationend', () => btn.classList.remove('cart-pop'), { once: true });
+
+    /* Top progress bar */
+    const pct = Math.min((total / SHIP_THRESHOLD) * 100, 100);
+    document.getElementById('ship-bar').style.width = pct + '%';
+    const rem = Math.max(SHIP_THRESHOLD - total, 0);
+    document.getElementById('ship-txt').innerHTML = rem <= 0
+      ? '🎉 <strong class="text-ink">קיבלת משלוח חינם!</strong>'
+      : `הוסיפי ₪${rem} לקנייה כדי לקבל <strong class="text-ink">משלוח חינם</strong> 🚚`;
+
+    /* Mobile sticky */
+    if (totalQty > 0) document.getElementById('mob-cta').classList.add('show');
+
+    /* Drawer items */
+    const list = document.getElementById('cart-list');
+    const empty = document.getElementById('cart-empty');
+    const footer = document.getElementById('cart-footer');
+
+    if (cartItems.length === 0) {
+      list.classList.add('hidden'); empty.classList.remove('hidden'); footer.classList.add('hidden');
+      return;
+    }
+    empty.classList.add('hidden'); list.classList.remove('hidden'); footer.classList.remove('hidden');
+
+    list.innerHTML = cartItems.map((item, i) => `
+      <div class="flex gap-3 bg-white border border-border rounded-2xl p-3">
+        <img src="https://placehold.co/72x72/F2DDD1/C4957A?text=Z" class="w-16 h-16 rounded-xl object-cover flex-shrink-0" alt="${item.name}">
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-sm leading-tight mb-0.5">${item.name}</p>
+          <p class="text-xs text-ink-m mb-2">צבע: ${item.color}</p>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2 border border-border rounded-lg overflow-hidden">
+              <button onclick="changeQty(${i},-1)" class="px-2.5 py-1 text-ink-s hover:bg-surface transition-colors focus-visible:outline-2 focus-visible:outline-accent text-lg leading-none">−</button>
+              <span class="text-sm font-semibold w-5 text-center">${item.qty}</span>
+              <button onclick="changeQty(${i},1)" class="px-2.5 py-1 text-ink-s hover:bg-surface transition-colors focus-visible:outline-2 focus-visible:outline-accent text-lg leading-none">+</button>
+            </div>
+            <span class="font-bold text-sm">₪${item.price * item.qty}</span>
+          </div>
+        </div>
+        <button onclick="removeFromCart(${i})" class="text-ink-m hover:text-ink transition-colors self-start p-1 focus-visible:outline-2 focus-visible:outline-accent rounded" aria-label="הסרי פריט">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    `).join('');
+
+    /* Cart footer */
+    document.getElementById('cart-total').textContent = `₪${total}`;
+    const cartRem = Math.max(SHIP_THRESHOLD - total, 0);
+    document.getElementById('cart-ship-bar').style.width = Math.min((total / SHIP_THRESHOLD) * 100, 100) + '%';
+    document.getElementById('cart-ship-note').innerHTML = cartRem <= 0
+      ? '🎉 <strong>קיבלת משלוח חינם!</strong>'
+      : `עוד ₪${cartRem} למשלוח חינם`;
+  }
+
+  function openCart() {
+    const overlay = document.getElementById('cart-overlay');
+    const drawer  = document.getElementById('cart-drawer');
+    const backdrop = document.getElementById('cart-backdrop');
+    overlay.style.pointerEvents = 'all';
+    backdrop.style.opacity = '1';
+    backdrop.style.pointerEvents = 'all';
+    drawer.style.transform  = 'translateX(0)';
+    document.body.style.overflow = 'hidden';
+    if (typeof fbq !== 'undefined') fbq('track', 'ViewContent');
+  }
+
+  function closeCart() {
+    const overlay = document.getElementById('cart-overlay');
+    const drawer  = document.getElementById('cart-drawer');
+    const backdrop = document.getElementById('cart-backdrop');
+    backdrop.style.opacity = '0';
+    backdrop.style.pointerEvents = 'none';
+    drawer.style.transform  = 'translateX(110%)';
+    setTimeout(() => { overlay.style.pointerEvents = 'none'; }, 350);
+    document.body.style.overflow = '';
+  }
+
+  /* ── Bundle picker ── */
+  const BUNDLE = { 1:{price:149,qty:1}, 2:{price:269,qty:2}, 3:{price:379,qty:3} };
+  let activeBundle = 2;
+
+  function selBundle(n) {
+    activeBundle = n;
+    document.querySelectorAll('.bundle-card').forEach((el,i) => el.classList.toggle('selected', i === n-1));
+    document.getElementById('hero-price').textContent = `₪${BUNDLE[n].price}`;
+    const tp = document.getElementById('table-price');
+    if (tp) tp.textContent = `₪${BUNDLE[n].price}`;
+  }
+
+  /* ── Tabs ── */
+  function switchTab(btn, id) {
+    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected','true');
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  /* ── Gallery ── */
+  function swImg(btn, src) {
+    document.getElementById('main-img').src = src;
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('on'));
+    btn.classList.add('on');
+  }
+
+  /* ── Color ── */
+  function selColor(btn) {
+    document.querySelectorAll('#product .swatch').forEach(s => s.classList.remove('on'));
+    btn.classList.add('on');
+    document.getElementById('prod-color').textContent = btn.dataset.color;
+  }
+  function heroSwatch(btn) {
+    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('on'));
+    btn.classList.add('on');
+    document.getElementById('hero-color-lbl').textContent = btn.dataset.color;
+  }
+
+  /* ── FAQ ── */
+  function toggleFaq(btn) {
+    const row = btn.closest('.faq-row');
+    const body = row.querySelector('.faq-body');
+    const isOpen = body.classList.contains('open');
+    document.querySelectorAll('.faq-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.faq-row').forEach(r => r.classList.remove('open'));
+    if (!isOpen) { body.classList.add('open'); row.classList.add('open'); }
+  }
+
+  /* ── Size modal ── */
+  function toggleSizeModal() {
+    document.getElementById('size-modal').classList.toggle('hidden');
+  }
+
+  /* ── Scroll reveal ── */
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  /* ── Mobile sticky CTA on scroll ── */
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 450) document.getElementById('mob-cta').classList.add('show');
+  }, { passive: true });
+
+  /* ── Live viewers ── */
+  const lv = document.getElementById('live-v');
+  setInterval(() => { lv.textContent = (Math.floor(Math.random() * 9) + 17) + ' אנשים צופות עכשיו'; }, 8000);
+
+  /* ── Exit intent popup ── */
+  let popupFired = false;
+  document.addEventListener('mouseleave', e => {
+    if (e.clientY <= 0 && !popupFired && cartQty === 0) {
+      popupFired = true;
+      document.getElementById('exit-popup').classList.add('show');
+    }
+  });
+  function submitPopup(e) {
+    e.preventDefault();
+    alert('קוד ההנחה שלך: ZIVOR10\nיוכשר אוטומטית בקופה!');
+    document.getElementById('exit-popup').classList.remove('show');
+  }
+</script>
+
+</body>
+</html>
