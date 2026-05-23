@@ -159,9 +159,9 @@ export default async function handler(req) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'ZIVOR <onboarding@resend.dev>',
-          to: ['zivorilstore@gmail.com'],
-          reply_to: customer_email,
+          from: 'ZIVOR <orders@zivor-il.com>',
+          to: [customer_email],
+          bcc: 'zivorilstore@gmail.com',
           subject: `${test_mode ? '[בדיקה] ' : ''}אישור הזמנה #${order.order_number} — ZIVOR`,
           html: emailHtml,
         }),
