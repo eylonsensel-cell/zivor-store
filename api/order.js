@@ -159,12 +159,12 @@ export default async function handler(req) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'ZIVOR <orders@zivor-il.com>',
+          from: 'ZIVOR <onboarding@resend.dev>',
           to: [customer_email],
           subject: `${test_mode ? '[בדיקה] ' : ''}אישור הזמנה #${order.order_number} — ZIVOR`,
           html: emailHtml,
         }),
-      }).catch(e => console.error('Email error:', e));
+      }).then(r => r.json()).then(d => console.log('Resend:', JSON.stringify(d))).catch(e => console.error('Email error:', e));
     }
 
     return new Response(
