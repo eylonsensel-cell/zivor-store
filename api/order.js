@@ -42,7 +42,7 @@ export default async function handler(req) {
     if (!res.ok) {
       const err = await res.text();
       console.error('Supabase error:', err);
-      return new Response(JSON.stringify({ error: 'שגיאה בשמירת ההזמנה' }), { status: 500, headers: cors });
+      return new Response(JSON.stringify({ error: 'שגיאה בשמירת ההזמנה', detail: err, key_set: !!SUPABASE_SECRET }), { status: 500, headers: cors });
     }
 
     const [order] = await res.json();
