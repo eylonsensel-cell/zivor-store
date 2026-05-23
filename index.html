@@ -146,6 +146,7 @@
     .mob-sticky { transform:translateY(110%);
       transition: transform .32s cubic-bezier(.22,1,.36,1); }
     .mob-sticky.show { transform:translateY(0); }
+    #mob-cta { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
 
     /* ── Popup ── */
     .popup-bg { opacity:0; pointer-events:none;
@@ -920,7 +921,7 @@
 </a>
 
 <!-- ░░░ STICKY MOBILE CTA ░░░ -->
-<div id="mob-cta" class="mob-sticky fixed bottom-0 inset-x-0 z-50 md:hidden bg-bg/98 backdrop-blur-md border-t border-border px-4 py-3 flex items-center gap-3">
+<div id="mob-cta" class="mob-sticky fixed bottom-0 inset-x-0 z-50 md:hidden border-t border-border px-4 py-3 flex items-center gap-3" style="background:#FAF6F2; box-shadow:0 -4px 24px -4px rgba(28,28,28,0.13)">
   <div class="flex-1 min-w-0">
     <p class="text-xs text-ink-s truncate">חגורה אוטומטית ZIVOR</p>
     <p class="font-bold text-base leading-none">₪149 <span class="text-ink-m line-through text-xs font-normal">₪199</span></p>
