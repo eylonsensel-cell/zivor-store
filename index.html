@@ -19,6 +19,14 @@
   </script>
 
   <!-- META_PIXEL_ID -->
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4QNS24P372"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4QNS24P372');
+  </script>
   <!-- GTM_ID -->
   <!-- TIKTOK_PIXEL_ID -->
 
@@ -121,6 +129,8 @@
     .swatch {
       width:28px; height:28px; border-radius:50%; cursor:pointer;
       transition: transform .2s ease;
+      border: 2.5px solid rgba(255,255,255,0.85);
+      box-shadow: 0 0 0 1.5px rgba(0,0,0,0.18);
     }
     .swatch:hover { transform:scale(1.18); }
     .swatch.on { outline:2.5px solid #C4957A; outline-offset:3px; }
@@ -180,11 +190,11 @@
 <!-- ░░░ TOP BAR ░░░ -->
 <div class="bg-ink text-bg text-xs py-2 marquee-wrap" aria-label="הודעות">
   <div class="marquee-track">
-    <span class="px-10 opacity-80">✦ משלוח חינם בקנייה מעל ₪299</span>
+    <span class="px-10 opacity-80">✦ משלוח חינם בקנייה מעל ₪199</span>
     <span class="px-10 opacity-80">✦ 30 יום החזרה — ללא שאלות</span>
     <span class="px-10 opacity-80">✦ תשלום מאובטח SSL</span>
     <span class="px-10 opacity-80">✦ 4,800+ נשים כבר אוהבות אותה</span>
-    <span class="px-10 opacity-80">✦ משלוח חינם בקנייה מעל ₪299</span>
+    <span class="px-10 opacity-80">✦ משלוח חינם בקנייה מעל ₪199</span>
     <span class="px-10 opacity-80">✦ 30 יום החזרה — ללא שאלות</span>
     <span class="px-10 opacity-80">✦ תשלום מאובטח SSL</span>
     <span class="px-10 opacity-80">✦ 4,800+ נשים כבר אוהבות אותה</span>
@@ -231,7 +241,7 @@
 </div>
 
 <!-- ░░░ UNIFIED PRODUCT HERO ░░░ -->
-<section class="py-10 md:py-14 bg-bg relative overflow-hidden grain">
+<section class="pt-4 pb-10 md:pt-6 md:pb-14 bg-bg relative overflow-hidden grain">
   <!-- Subtle bg gradient -->
   <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
     <div class="absolute top-0 end-0 w-[50%] h-[70%]" style="background:radial-gradient(ellipse at 70% 10%, #F2DDD1 0%, transparent 65%); opacity:.6;"></div>
@@ -243,8 +253,8 @@
       <!-- ── Gallery (sticky on desktop) ── -->
       <div class="md:sticky md:top-20">
         <!-- Main image -->
-        <div class="relative rounded-[1.5rem] overflow-hidden mb-3 shadow-[0_20px_56px_-12px_rgba(196,149,122,.38)]">
-          <img id="main-img" src="https://placehold.co/600x700/F2DDD1/C4957A?text=ZIVOR" alt="חגורה אוטומטית ZIVOR" class="w-full object-cover aspect-[5/6]" loading="eager" fetchpriority="high">
+        <div class="relative rounded-[1.5rem] overflow-hidden mb-3 shadow-[0_20px_56px_-12px_rgba(196,149,122,.38)] bg-bg">
+          <img id="main-img" src="https://placehold.co/600x700/F2DDD1/C4957A?text=ZIVOR" alt="חגורה אוטומטית ZIVOR" class="w-full object-contain aspect-[4/5]" loading="eager" fetchpriority="high">
           <div class="absolute inset-0 bg-gradient-to-t from-ink/20 via-transparent to-transparent pointer-events-none"></div>
           <!-- Live viewers -->
           <div class="absolute top-4 start-4 bg-white/90 backdrop-blur-sm border border-border rounded-full px-3 py-1.5 flex items-center gap-1.5 text-xs text-ink-s shadow-sm">
@@ -289,71 +299,122 @@
           <a href="#reviews" class="text-sm text-ink-m underline underline-offset-2 hover:text-accent transition-colors">4,821 ביקורות</a>
         </div>
 
-        <!-- ── Bundle picker ── -->
+        <!-- ── Bundle picker with inline color selection ── -->
         <div class="space-y-2">
           <p class="text-xs font-bold text-ink-s uppercase tracking-widest flex items-center gap-1.5">🔥 קני יותר ושלמי פחות!</p>
 
           <!-- 1 belt -->
-          <label class="bundle-card flex items-center gap-4 p-4 rounded-2xl border-2 border-border cursor-pointer hover:border-accent/50 transition-colors" onclick="selBundle(1)">
-            <div class="bundle-radio w-5 h-5 rounded-full border-2 border-border flex-shrink-0 flex items-center justify-center transition-colors">
-              <div class="bundle-dot w-2.5 h-2.5 rounded-full bg-accent scale-0 transition-transform"></div>
+          <div id="bundle-card-1" class="bundle-card rounded-2xl border-2 border-border cursor-pointer hover:border-accent/50 transition-all" onclick="selBundle(1)">
+            <div class="flex items-center gap-4 p-4">
+              <div class="bundle-radio w-5 h-5 rounded-full border-2 border-border flex-shrink-0 flex items-center justify-center transition-colors">
+                <div class="bundle-dot w-2.5 h-2.5 rounded-full bg-accent scale-0 transition-transform"></div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <span class="font-semibold text-sm">חגורה אחת</span>
+                <span class="text-xs text-ink-m me-2"> · חסכת ₪50</span>
+              </div>
+              <div class="text-start flex-shrink-0">
+                <span class="font-bold">₪149</span>
+                <span class="text-ink-m line-through text-xs ms-1">₪199</span>
+              </div>
             </div>
-            <div class="flex-1 min-w-0">
-              <span class="font-semibold text-sm">חגורה אחת</span>
-              <span class="text-xs text-ink-m me-2"> · חסכת ₪50</span>
+            <div class="bundle-colors hidden border-t border-border/40 mx-4 mb-4 pt-3" onclick="event.stopPropagation()">
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-semibold text-ink-s">צבע:</span>
+                <div class="flex gap-2">
+                  <button class="swatch swatch-b1-1 on" style="background:#1C1C1C;" data-color="שחור" onclick="selBeltColor(this,'b1',1)" aria-label="שחור"></button>
+                  <button class="swatch swatch-b1-1" style="background:#D4BFA5;" data-color="בז׳" onclick="selBeltColor(this,'b1',1)" aria-label="בז'"></button>
+                </div>
+                <span class="text-xs text-ink-s" id="color-lbl-b1-1">שחור</span>
+              </div>
             </div>
-            <div class="text-start flex-shrink-0">
-              <span class="font-bold">₪149</span>
-              <span class="text-ink-m line-through text-xs ms-1">₪199</span>
-            </div>
-          </label>
+          </div>
 
           <!-- 2 belts (default selected) -->
-          <label class="bundle-card selected flex items-center gap-4 p-4 rounded-2xl border-2 border-accent cursor-pointer bg-accent/5 transition-colors relative" onclick="selBundle(2)">
+          <div id="bundle-card-2" class="bundle-card selected rounded-2xl border-2 border-accent cursor-pointer bg-accent/5 transition-all relative" onclick="selBundle(2)">
             <div class="absolute -top-3 start-4 bg-ink text-bg text-[10px] font-bold px-2.5 py-1 rounded-full">הכי פופולרי ✦</div>
-            <div class="bundle-radio w-5 h-5 rounded-full border-2 border-accent flex-shrink-0 flex items-center justify-center">
-              <div class="bundle-dot w-2.5 h-2.5 rounded-full bg-accent scale-100 transition-transform"></div>
+            <div class="flex items-center gap-4 p-4">
+              <div class="bundle-radio w-5 h-5 rounded-full border-2 border-accent flex-shrink-0 flex items-center justify-center">
+                <div class="bundle-dot w-2.5 h-2.5 rounded-full bg-accent scale-100 transition-transform"></div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <span class="font-semibold text-sm">שתי חגורות</span>
+                <span class="text-xs text-ink-m me-2"> · חסכת ₪129</span>
+              </div>
+              <div class="text-start flex-shrink-0">
+                <span class="font-bold">₪269</span>
+                <span class="text-ink-m line-through text-xs ms-1">₪398</span>
+              </div>
             </div>
-            <div class="flex-1 min-w-0">
-              <span class="font-semibold text-sm">שתי חגורות</span>
-              <span class="text-xs text-ink-m me-2"> · חסכת ₪129</span>
+            <div class="bundle-colors border-t border-border/40 mx-4 mb-4 pt-3 space-y-2" onclick="event.stopPropagation()">
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-semibold text-ink-s w-14 flex-shrink-0">חגורה 1:</span>
+                <div class="flex gap-2">
+                  <button class="swatch swatch-b2-1 on" style="background:#1C1C1C;" data-color="שחור" onclick="selBeltColor(this,'b2',1)" aria-label="שחור"></button>
+                  <button class="swatch swatch-b2-1" style="background:#D4BFA5;" data-color="בז׳" onclick="selBeltColor(this,'b2',1)" aria-label="בז'"></button>
+                </div>
+                <span class="text-xs text-ink-s" id="color-lbl-b2-1">שחור</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-semibold text-ink-s w-14 flex-shrink-0">חגורה 2:</span>
+                <div class="flex gap-2">
+                  <button class="swatch swatch-b2-2 on" style="background:#1C1C1C;" data-color="שחור" onclick="selBeltColor(this,'b2',2)" aria-label="שחור"></button>
+                  <button class="swatch swatch-b2-2" style="background:#D4BFA5;" data-color="בז׳" onclick="selBeltColor(this,'b2',2)" aria-label="בז'"></button>
+                </div>
+                <span class="text-xs text-ink-s" id="color-lbl-b2-2">שחור</span>
+              </div>
             </div>
-            <div class="text-start flex-shrink-0">
-              <span class="font-bold">₪269</span>
-              <span class="text-ink-m line-through text-xs ms-1">₪398</span>
-            </div>
-          </label>
+          </div>
 
           <!-- 3 belts -->
-          <label class="bundle-card flex items-center gap-4 p-4 rounded-2xl border-2 border-border cursor-pointer hover:border-accent/50 transition-colors relative" onclick="selBundle(3)">
+          <div id="bundle-card-3" class="bundle-card rounded-2xl border-2 border-border cursor-pointer hover:border-accent/50 transition-all relative" onclick="selBundle(3)">
             <div class="absolute -top-3 start-4 bg-accent/15 text-accent text-[10px] font-bold px-2.5 py-1 rounded-full">הכי משתלם 💰</div>
-            <div class="bundle-radio w-5 h-5 rounded-full border-2 border-border flex-shrink-0 flex items-center justify-center transition-colors">
-              <div class="bundle-dot w-2.5 h-2.5 rounded-full bg-accent scale-0 transition-transform"></div>
+            <div class="flex items-center gap-4 p-4">
+              <div class="bundle-radio w-5 h-5 rounded-full border-2 border-border flex-shrink-0 flex items-center justify-center transition-colors">
+                <div class="bundle-dot w-2.5 h-2.5 rounded-full bg-accent scale-0 transition-transform"></div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <span class="font-semibold text-sm">שלוש חגורות</span>
+                <span class="text-xs text-ink-m me-2"> · חסכת ₪218 + משלוח חינם</span>
+              </div>
+              <div class="text-start flex-shrink-0">
+                <span class="font-bold">₪379</span>
+                <span class="text-ink-m line-through text-xs ms-1">₪597</span>
+              </div>
             </div>
-            <div class="flex-1 min-w-0">
-              <span class="font-semibold text-sm">שלוש חגורות</span>
-              <span class="text-xs text-ink-m me-2"> · חסכת ₪218 + משלוח חינם</span>
+            <div class="bundle-colors hidden border-t border-border/40 mx-4 mb-4 pt-3 space-y-2" onclick="event.stopPropagation()">
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-semibold text-ink-s w-14 flex-shrink-0">חגורה 1:</span>
+                <div class="flex gap-2">
+                  <button class="swatch swatch-b3-1 on" style="background:#1C1C1C;" data-color="שחור" onclick="selBeltColor(this,'b3',1)" aria-label="שחור"></button>
+                  <button class="swatch swatch-b3-1" style="background:#D4BFA5;" data-color="בז׳" onclick="selBeltColor(this,'b3',1)" aria-label="בז'"></button>
+                </div>
+                <span class="text-xs text-ink-s" id="color-lbl-b3-1">שחור</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-semibold text-ink-s w-14 flex-shrink-0">חגורה 2:</span>
+                <div class="flex gap-2">
+                  <button class="swatch swatch-b3-2 on" style="background:#1C1C1C;" data-color="שחור" onclick="selBeltColor(this,'b3',2)" aria-label="שחור"></button>
+                  <button class="swatch swatch-b3-2" style="background:#D4BFA5;" data-color="בז׳" onclick="selBeltColor(this,'b3',2)" aria-label="בז'"></button>
+                </div>
+                <span class="text-xs text-ink-s" id="color-lbl-b3-2">שחור</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-semibold text-ink-s w-14 flex-shrink-0">חגורה 3:</span>
+                <div class="flex gap-2">
+                  <button class="swatch swatch-b3-3 on" style="background:#1C1C1C;" data-color="שחור" onclick="selBeltColor(this,'b3',3)" aria-label="שחור"></button>
+                  <button class="swatch swatch-b3-3" style="background:#D4BFA5;" data-color="בז׳" onclick="selBeltColor(this,'b3',3)" aria-label="בז'"></button>
+                </div>
+                <span class="text-xs text-ink-s" id="color-lbl-b3-3">שחור</span>
+              </div>
             </div>
-            <div class="text-start flex-shrink-0">
-              <span class="font-bold">₪379</span>
-              <span class="text-ink-m line-through text-xs ms-1">₪597</span>
-            </div>
-          </label>
+          </div>
         </div>
 
-        <!-- Color + size -->
-        <div class="flex items-center gap-6">
-          <div>
-            <p class="text-xs font-semibold text-ink-s mb-2">צבע: <span id="prod-color" class="text-ink">שחור</span></p>
-            <div class="flex gap-2.5">
-              <button class="swatch on" style="background:#1C1C1C;" data-color="שחור" onclick="selColor(this)" aria-label="שחור"></button>
-              <button class="swatch"    style="background:#D4BFA5;" data-color="בז׳"  onclick="selColor(this)" aria-label="בז'"></button>
-            </div>
-          </div>
-          <div>
-            <p class="text-xs font-semibold text-ink-s mb-2">מידה</p>
-            <button class="text-sm border border-border rounded-lg px-3 py-1.5 hover:border-accent transition-colors focus-visible:outline-2 focus-visible:outline-accent" onclick="toggleSizeModal()">אוניברסלית — XS–XL ↗</button>
-          </div>
+        <!-- Size (single, outside bundle cards) -->
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-semibold text-ink-s">מידה:</span>
+          <button class="text-sm border border-border rounded-lg px-3 py-1.5 hover:border-accent transition-colors focus-visible:outline-2 focus-visible:outline-accent" onclick="toggleSizeModal()">אוניברסלית — XS–XL ↗</button>
         </div>
 
         <!-- Stock -->
@@ -434,20 +495,20 @@
   <div class="max-w-6xl mx-auto px-5">
     <div class="text-center mb-14 reveal">
       <span class="text-accent text-xs font-bold tracking-[.18em] uppercase mb-3 block">למה ZIVOR</span>
-      <h2 class="font-body font-black text-4xl md:text-5xl mb-4" style="letter-spacing:-.03em;">כשסטייל פוגש נוחות<br>ללא פשרות</h2>
+      <h2 class="font-body font-black text-3xl md:text-5xl mb-4" style="letter-spacing:-.03em;">כשסטייל פוגש נוחות<br>ללא פשרות</h2>
       <p class="text-ink-s text-lg max-w-xl mx-auto" style="line-height:1.7;">תשכחי מחגורות עם חורים שנהרסות כל כמה חודשים —<br>זה העתיד של החגורות.</p>
     </div>
 
     <div class="grid md:grid-cols-3 gap-8 items-center">
       <!-- Right benefits -->
       <div class="space-y-10 reveal">
-        <div class="flex flex-col items-end text-end gap-3">
+        <div class="flex flex-col items-start text-start md:items-end md:text-end gap-3">
           <div class="w-12 h-12 rounded-2xl bg-surface flex items-center justify-center shadow-[0_4px_16px_-4px_rgba(196,149,122,.25)]">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           </div>
           <div><h3 class="font-body font-bold text-lg mb-1">מתאימה לכל אירוע</h3><p class="text-ink-s text-sm" style="line-height:1.7;">בקניון עם חברה, יום ארוך במשרד, ערב רומנטי — חגורה אחת שעושה הכל.</p></div>
         </div>
-        <div class="flex flex-col items-end text-end gap-3">
+        <div class="flex flex-col items-start text-start md:items-end md:text-end gap-3">
           <div class="w-12 h-12 rounded-2xl bg-surface flex items-center justify-center shadow-[0_4px_16px_-4px_rgba(196,149,122,.25)]">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
           </div>
@@ -489,53 +550,53 @@
 <section class="py-16 bg-surface/30 border-y border-border">
   <div class="max-w-3xl mx-auto px-5">
     <div class="text-center mb-10 reveal">
-      <h2 class="font-body font-black text-4xl" style="letter-spacing:-.03em;">למה לבחור דווקא ב-ZIVOR?</h2>
+      <h2 class="font-body font-black text-3xl md:text-4xl" style="letter-spacing:-.03em;">למה לבחור דווקא ב-ZIVOR?</h2>
     </div>
 
     <div class="reveal overflow-hidden rounded-2xl border border-border shadow-[0_8px_32px_-8px_rgba(196,149,122,.2)]">
       <!-- Header row -->
       <div class="grid grid-cols-3 bg-ink text-bg">
-        <div class="col-span-1 px-5 py-4 text-sm font-bold text-bg/60">תכונה</div>
-        <div class="px-5 py-4 text-sm font-bold text-center text-bg/60">אחרות</div>
-        <div class="px-5 py-4 text-sm font-bold text-center bg-accent/20 text-accent tracking-wide">ZIVOR</div>
+        <div class="col-span-1 px-3 py-3 md:px-5 md:py-4 text-xs md:text-sm font-bold text-bg/60">תכונה</div>
+        <div class="px-3 py-3 md:px-5 md:py-4 text-xs md:text-sm font-bold text-center text-bg/60">אחרות</div>
+        <div class="px-3 py-3 md:px-5 md:py-4 text-xs md:text-sm font-bold text-center bg-accent/20 text-accent tracking-wide">ZIVOR</div>
       </div>
 
       <!-- Rows -->
       <div class="divide-y divide-border bg-white">
         <div class="grid grid-cols-3 items-center">
-          <div class="px-5 py-4 text-sm font-semibold">מנגנון אוטומטי ללא חורים</div>
-          <div class="px-5 py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
-          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+          <div class="px-3 py-3 md:px-5 md:py-4 text-xs md:text-sm font-semibold">מנגנון אוטומטי ללא חורים</div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
         </div>
         <div class="grid grid-cols-3 items-center bg-surface/30">
-          <div class="px-5 py-4 text-sm font-semibold">מתאימה לכל המידות</div>
-          <div class="px-5 py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
-          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+          <div class="px-3 py-3 md:px-5 md:py-4 text-xs md:text-sm font-semibold">מתאימה לכל המידות</div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
         </div>
         <div class="grid grid-cols-3 items-center">
-          <div class="px-5 py-4 text-sm font-semibold">חגורה אחת, למגוון שימושים</div>
-          <div class="px-5 py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
-          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+          <div class="px-3 py-3 md:px-5 md:py-4 text-xs md:text-sm font-semibold">חגורה אחת, למגוון שימושים</div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
         </div>
         <div class="grid grid-cols-3 items-center bg-surface/30">
-          <div class="px-5 py-4 text-sm font-semibold">נוחות ללא פשרות</div>
-          <div class="px-5 py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
-          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+          <div class="px-3 py-3 md:px-5 md:py-4 text-xs md:text-sm font-semibold">נוחות ללא פשרות</div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
         </div>
         <div class="grid grid-cols-3 items-center">
-          <div class="px-5 py-4 text-sm font-semibold">עשויה מחומרים איכותיים</div>
-          <div class="px-5 py-4 flex justify-center"><span class="text-ink-m text-xl font-bold">✓</span></div>
-          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+          <div class="px-3 py-3 md:px-5 md:py-4 text-xs md:text-sm font-semibold">עשויה מחומרים איכותיים</div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center"><span class="text-ink-m text-xl font-bold">✓</span></div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
         </div>
         <div class="grid grid-cols-3 items-center bg-surface/30">
-          <div class="px-5 py-4 text-sm font-semibold">עיצוב יוקרתי שגורר מחמאות</div>
-          <div class="px-5 py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
-          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+          <div class="px-3 py-3 md:px-5 md:py-4 text-xs md:text-sm font-semibold">עיצוב יוקרתי שגורר מחמאות</div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
         </div>
         <div class="grid grid-cols-3 items-center">
-          <div class="px-5 py-4 text-sm font-semibold">30 יום החזרה ללא שאלות</div>
-          <div class="px-5 py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
-          <div class="px-5 py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
+          <div class="px-3 py-3 md:px-5 md:py-4 text-xs md:text-sm font-semibold">30 יום החזרה ללא שאלות</div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center"><span class="text-red-400 text-xl font-bold">✕</span></div>
+          <div class="px-2 py-3 md:px-5 md:py-4 flex justify-center bg-accent/5"><span class="text-accent text-xl font-bold">✓</span></div>
         </div>
       </div>
 
@@ -555,7 +616,7 @@
   <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 20% 60%, rgba(196,149,122,.12) 0%, transparent 55%);"></div>
   <div class="max-w-5xl mx-auto px-5 relative z-10">
     <div class="text-center mb-14 reveal">
-      <h2 class="font-display font-black text-4xl text-bg" style="letter-spacing:-.03em;">ZIVOR לעומת חגורה רגילה</h2>
+      <h2 class="font-display font-black text-3xl md:text-4xl text-bg" style="letter-spacing:-.03em;">ZIVOR לעומת חגורה רגילה</h2>
     </div>
     <div class="grid md:grid-cols-2 gap-12">
       <div class="reveal">
@@ -643,7 +704,7 @@
   <div class="max-w-5xl mx-auto px-5">
     <div class="text-center mb-10 reveal">
       <span class="text-accent text-xs font-bold tracking-[.18em] uppercase mb-3 block">חסכי יותר</span>
-      <h2 class="font-display font-black text-4xl" style="letter-spacing:-.03em;">חבילות מיוחדות</h2>
+      <h2 class="font-display font-black text-3xl md:text-4xl" style="letter-spacing:-.03em;">חבילות מיוחדות</h2>
     </div>
     <div class="grid md:grid-cols-3 gap-5">
 
@@ -653,17 +714,25 @@
           <h3 class="font-display font-bold text-xl mb-1">חגורה אחת</h3>
           <p class="text-ink-m text-sm mb-5">הניסיון הראשון</p>
           <div class="flex items-baseline gap-2 mb-5"><span class="font-black text-3xl">₪149</span><span class="text-ink-m line-through">₪199</span></div>
-          <ul class="space-y-2 text-sm text-ink-s mb-6">
+          <ul class="space-y-2 text-sm text-ink-s mb-5">
             <li class="flex items-center gap-2"><span class="text-accent">✓</span>חגורה אחת לבחירה</li>
             <li class="flex items-center gap-2"><span class="text-accent">✓</span>משלוח ₪29</li>
             <li class="flex items-center gap-2"><span class="text-accent">✓</span>30 יום החזרה</li>
           </ul>
+          <div class="border-t border-border pt-4 mb-2">
+            <p class="text-xs font-semibold text-ink-s mb-2">בחרי צבע:</p>
+            <div class="flex items-center gap-2">
+              <button class="swatch swatch-p1-1 on" style="background:#1C1C1C;" data-color="שחור" onclick="selBeltColor(this,'p1',1)" aria-label="שחור"></button>
+              <button class="swatch swatch-p1-1" style="background:#D4BFA5;" data-color="בז׳" onclick="selBeltColor(this,'p1',1)" aria-label="בז'"></button>
+              <span class="text-xs text-ink-s ms-1" id="color-lbl-p1-1">שחור</span>
+            </div>
+          </div>
         </div>
-        <button onclick="addToCart(1)" class="btn-ring w-full py-3 rounded-xl font-semibold text-sm">בחרי</button>
+        <button onclick="addToCartPkg(1,'p1')" class="btn-ring w-full py-3 rounded-xl font-semibold text-sm mt-4">בחרי</button>
       </div>
 
       <!-- 2 (popular) -->
-      <div class="reveal bg-ink text-bg border-2 border-accent rounded-2xl p-6 flex flex-col relative" style="transition-delay:.1s">
+      <div class="reveal bg-[#211510] text-bg border-2 border-accent rounded-2xl p-6 flex flex-col relative" style="transition-delay:.1s">
         <div class="absolute -top-3.5 left-0 right-0 flex justify-center">
           <span class="bg-accent text-white text-xs font-bold px-4 py-1 rounded-full">הכי פופולרי ✦</span>
         </div>
@@ -671,14 +740,28 @@
           <h3 class="font-display font-bold text-xl mb-1 text-bg">שתי חגורות</h3>
           <p class="text-bg/55 text-sm mb-5">שמרי לצבעים שונים</p>
           <div class="flex items-baseline gap-2 mb-5"><span class="font-black text-3xl text-bg">₪269</span><span class="text-bg/45 line-through">₪398</span></div>
-          <ul class="space-y-2 text-sm text-bg/75 mb-6">
+          <ul class="space-y-2 text-sm text-bg/75 mb-5">
             <li class="flex items-center gap-2"><span class="text-accent">✓</span>שתי חגורות לבחירה</li>
             <li class="flex items-center gap-2"><span class="text-accent">✓</span>משלוח חינם</li>
             <li class="flex items-center gap-2"><span class="text-accent">✓</span>חסכת ₪129</li>
             <li class="flex items-center gap-2"><span class="text-accent">✓</span>30 יום החזרה</li>
           </ul>
+          <div class="border-t border-bg/20 pt-4 mb-2 space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-semibold text-bg/70 w-14 flex-shrink-0">חגורה 1:</span>
+              <button class="swatch swatch-p2-1 on" style="background:#1C1C1C;" data-color="שחור" onclick="selBeltColor(this,'p2',1)" aria-label="שחור"></button>
+              <button class="swatch swatch-p2-1" style="background:#D4BFA5;" data-color="בז׳" onclick="selBeltColor(this,'p2',1)" aria-label="בז'"></button>
+              <span class="text-xs text-bg/60 ms-1" id="color-lbl-p2-1">שחור</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-semibold text-bg/70 w-14 flex-shrink-0">חגורה 2:</span>
+              <button class="swatch swatch-p2-2 on" style="background:#1C1C1C;" data-color="שחור" onclick="selBeltColor(this,'p2',2)" aria-label="שחור"></button>
+              <button class="swatch swatch-p2-2" style="background:#D4BFA5;" data-color="בז׳" onclick="selBeltColor(this,'p2',2)" aria-label="בז'"></button>
+              <span class="text-xs text-bg/60 ms-1" id="color-lbl-p2-2">שחור</span>
+            </div>
+          </div>
         </div>
-        <button onclick="addToCart(2)" class="btn-accent w-full py-3 rounded-xl font-semibold text-sm">
+        <button onclick="addToCartPkg(2,'p2')" class="btn-accent w-full py-3 rounded-xl font-semibold text-sm mt-4">
           בחרי — חסכי ₪129
         </button>
       </div>
@@ -689,14 +772,34 @@
           <h3 class="font-display font-bold text-xl mb-1">שלוש חגורות</h3>
           <p class="text-ink-m text-sm mb-5">מתנה לחברות / משפחה</p>
           <div class="flex items-baseline gap-2 mb-5"><span class="font-black text-3xl">₪379</span><span class="text-ink-m line-through">₪597</span></div>
-          <ul class="space-y-2 text-sm text-ink-s mb-6">
+          <ul class="space-y-2 text-sm text-ink-s mb-5">
             <li class="flex items-center gap-2"><span class="text-accent">✓</span>שלוש חגורות לבחירה</li>
             <li class="flex items-center gap-2"><span class="text-accent">✓</span>משלוח חינם + עדיפות</li>
             <li class="flex items-center gap-2"><span class="text-accent">✓</span>חסכת ₪218</li>
             <li class="flex items-center gap-2"><span class="text-accent">✓</span>30 יום החזרה</li>
           </ul>
+          <div class="border-t border-border pt-4 mb-2 space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-semibold text-ink-s w-14 flex-shrink-0">חגורה 1:</span>
+              <button class="swatch swatch-p3-1 on" style="background:#1C1C1C;" data-color="שחור" onclick="selBeltColor(this,'p3',1)" aria-label="שחור"></button>
+              <button class="swatch swatch-p3-1" style="background:#D4BFA5;" data-color="בז׳" onclick="selBeltColor(this,'p3',1)" aria-label="בז'"></button>
+              <span class="text-xs text-ink-s ms-1" id="color-lbl-p3-1">שחור</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-semibold text-ink-s w-14 flex-shrink-0">חגורה 2:</span>
+              <button class="swatch swatch-p3-2 on" style="background:#1C1C1C;" data-color="שחור" onclick="selBeltColor(this,'p3',2)" aria-label="שחור"></button>
+              <button class="swatch swatch-p3-2" style="background:#D4BFA5;" data-color="בז׳" onclick="selBeltColor(this,'p3',2)" aria-label="בז'"></button>
+              <span class="text-xs text-ink-s ms-1" id="color-lbl-p3-2">שחור</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-semibold text-ink-s w-14 flex-shrink-0">חגורה 3:</span>
+              <button class="swatch swatch-p3-3 on" style="background:#1C1C1C;" data-color="שחור" onclick="selBeltColor(this,'p3',3)" aria-label="שחור"></button>
+              <button class="swatch swatch-p3-3" style="background:#D4BFA5;" data-color="בז׳" onclick="selBeltColor(this,'p3',3)" aria-label="בז'"></button>
+              <span class="text-xs text-ink-s ms-1" id="color-lbl-p3-3">שחור</span>
+            </div>
+          </div>
         </div>
-        <button onclick="addToCart(3)" class="btn-ring w-full py-3 rounded-xl font-semibold text-sm">בחרי</button>
+        <button onclick="addToCartPkg(3,'p3')" class="btn-ring w-full py-3 rounded-xl font-semibold text-sm mt-4">בחרי</button>
       </div>
 
     </div>
@@ -756,7 +859,7 @@
 <!-- ░░░ FOOTER ░░░ -->
 <footer class="bg-ink text-bg/75 pt-14 pb-8">
   <div class="max-w-5xl mx-auto px-5">
-    <div class="grid md:grid-cols-4 gap-8 mb-10">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-10">
       <div class="md:col-span-1">
         <h2 class="font-display font-black text-2xl text-bg mb-2" style="letter-spacing:-.04em;">ZIVOR</h2>
         <p class="text-bg/50 text-sm mb-4" style="line-height:1.75;">חגורה אוטומטית לנשים — מכווננת את עצמה לגוף שלך.</p>
@@ -809,7 +912,7 @@
 <!-- ░░░ FLOATING WHATSAPP ░░░ -->
 <a href="https://wa.me/972501234567?text=היי, אני מעוניינת בחגורה ZIVOR"
    target="_blank" rel="noopener noreferrer"
-   class="wa-btn fixed bottom-6 end-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_6px_20px_-4px_rgba(37,211,102,.5)] focus-visible:outline-2 focus-visible:outline-white"
+   class="wa-btn fixed bottom-[5rem] md:bottom-6 end-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_6px_20px_-4px_rgba(37,211,102,.5)] focus-visible:outline-2 focus-visible:outline-white"
    aria-label="שלחי הודעה ב-WhatsApp">
   <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
@@ -939,28 +1042,51 @@
 <!-- ░░░ SCRIPTS ░░░ -->
 <script>
   /* ── Cart state ── */
-  const PRICE = 149;
-  const SHIP_THRESHOLD = 299;
-  let cartItems = []; // { name, color, price, qty }
+  const SHIP_THRESHOLD = 199;
+  let cartItems = []; // { name, colorStr, price, qty }
 
-  function getSelectedColor() {
-    const s = document.querySelector('#product .swatch.on');
-    return s ? s.dataset.color : 'שחור';
-  }
-
-  function addToCart(qty) {
-    if (qty === undefined) qty = BUNDLE[activeBundle].qty;
-    const color = getSelectedColor();
-    const name = 'חגורה אוטומטית ZIVOR';
-    const existing = cartItems.find(i => i.name === name && i.color === color);
-    if (existing) existing.qty += qty;
-    else cartItems.push({ name, color, price: PRICE, qty });
-
+  function addToCartPkg(qty, pkgKey) {
+    const prices = { 1: 149, 2: 269, 3: 379 };
+    const price = prices[qty];
+    const colors = Array.from({length: qty}, (_, i) => {
+      const s = document.querySelector(`.swatch-${pkgKey}-${i+1}.on`);
+      return s ? s.dataset.color : 'שחור';
+    });
+    const name = qty === 1 ? 'חגורה אוטומטית ZIVOR' : `חגורה ZIVOR × ${qty}`;
+    const colorStr = colors.join(' + ');
+    const existing = cartItems.find(i => i.name === name && i.colorStr === colorStr);
+    if (existing) existing.qty += 1;
+    else cartItems.push({ name, colorStr, price, qty: 1 });
     updateCartUI();
     openCart();
+    if (typeof fbq !== 'undefined') fbq('track', 'AddToCart', { value: price, currency: 'ILS' });
+    gtag('event', 'add_to_cart', { currency: 'ILS', value: price, items: [{ item_name: name, quantity: 1, price }] });
+  }
 
-    /* Pixel */
-    if (typeof fbq !== 'undefined') fbq('track', 'AddToCart', { value: PRICE * qty, currency: 'ILS' });
+  function selBeltColor(btn, bundleKey, beltNum) {
+    document.querySelectorAll(`.swatch-${bundleKey}-${beltNum}`).forEach(s => s.classList.remove('on'));
+    btn.classList.add('on');
+    const lbl = document.getElementById(`color-lbl-${bundleKey}-${beltNum}`);
+    if (lbl) lbl.textContent = btn.dataset.color;
+  }
+
+  function addToCart() {
+    const bundleInfo = BUNDLE[activeBundle];
+    const qty = bundleInfo.qty;
+    const bk = `b${activeBundle}`;
+    const colors = Array.from({length: qty}, (_, i) => {
+      const s = document.querySelector(`.swatch-${bk}-${i+1}.on`);
+      return s ? s.dataset.color : 'שחור';
+    });
+    const name = qty === 1 ? 'חגורה אוטומטית ZIVOR' : `חגורה ZIVOR × ${qty}`;
+    const colorStr = colors.join(' + ');
+    const existing = cartItems.find(i => i.name === name && i.colorStr === colorStr);
+    if (existing) existing.qty += 1;
+    else cartItems.push({ name, colorStr, price: bundleInfo.price, qty: 1 });
+    updateCartUI();
+    openCart();
+    if (typeof fbq !== 'undefined') fbq('track', 'AddToCart', { value: bundleInfo.price, currency: 'ILS' });
+    gtag('event', 'add_to_cart', { currency: 'ILS', value: bundleInfo.price, items: [{ item_name: name, quantity: 1, price: bundleInfo.price }] });
   }
 
   function removeFromCart(idx) {
@@ -1011,7 +1137,7 @@
         <img src="https://placehold.co/72x72/F2DDD1/C4957A?text=Z" class="w-16 h-16 rounded-xl object-cover flex-shrink-0" alt="${item.name}">
         <div class="flex-1 min-w-0">
           <p class="font-semibold text-sm leading-tight mb-0.5">${item.name}</p>
-          <p class="text-xs text-ink-m mb-2">צבע: ${item.color}</p>
+          <p class="text-xs text-ink-m mb-2">צבע: ${item.colorStr || item.color || ''}</p>
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2 border border-border rounded-lg overflow-hidden">
               <button onclick="changeQty(${i},-1)" class="px-2.5 py-1 text-ink-s hover:bg-surface transition-colors focus-visible:outline-2 focus-visible:outline-accent text-lg leading-none">−</button>
@@ -1034,6 +1160,9 @@
     document.getElementById('cart-ship-note').innerHTML = cartRem <= 0
       ? '🎉 <strong>קיבלת משלוח חינם!</strong>'
       : `עוד ₪${cartRem} למשלוח חינם`;
+
+    /* Persist cart for checkout page */
+    sessionStorage.setItem('zivor_cart', JSON.stringify(cartItems));
   }
 
   function openCart() {
@@ -1065,7 +1194,15 @@
 
   function selBundle(n) {
     activeBundle = n;
-    document.querySelectorAll('.bundle-card').forEach((el,i) => el.classList.toggle('selected', i === n-1));
+    [1, 2, 3].forEach(i => {
+      const card = document.getElementById(`bundle-card-${i}`);
+      const dot  = card.querySelector('.bundle-dot');
+      const cols = card.querySelector('.bundle-colors');
+      const isActive = i === n;
+      card.classList.toggle('selected', isActive);
+      dot.style.transform = isActive ? 'scale(1)' : 'scale(0)';
+      cols.classList.toggle('hidden', !isActive);
+    });
     document.getElementById('hero-price').textContent = `₪${BUNDLE[n].price}`;
     const tp = document.getElementById('table-price');
     if (tp) tp.textContent = `₪${BUNDLE[n].price}`;
@@ -1087,17 +1224,9 @@
     btn.classList.add('on');
   }
 
-  /* ── Color ── */
-  function selColor(btn) {
-    document.querySelectorAll('#product .swatch').forEach(s => s.classList.remove('on'));
-    btn.classList.add('on');
-    document.getElementById('prod-color').textContent = btn.dataset.color;
-  }
-  function heroSwatch(btn) {
-    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('on'));
-    btn.classList.add('on');
-    document.getElementById('hero-color-lbl').textContent = btn.dataset.color;
-  }
+  /* ── Color (legacy stubs — replaced by selBeltColor) ── */
+  function selColor(btn) { selBeltColor(btn, 1); }
+  function heroSwatch(btn) { selBeltColor(btn, 1); }
 
   /* ── FAQ ── */
   function toggleFaq(btn) {
@@ -1142,6 +1271,39 @@
     alert('קוד ההנחה שלך: ZIVOR10\nיוכשר אוטומטית בקופה!');
     document.getElementById('exit-popup').classList.remove('show');
   }
+
+  /* ── Load product from Supabase ── */
+  const SB_URL  = 'https://wqbozlhyobharxaduink.supabase.co';
+  const SB_ANON = 'sb_publishable_iKMQ4hUPt0uEuaWWzk7ObA_4Mh4HVGt';
+
+  async function loadProduct() {
+    try {
+      const res = await fetch(
+        `${SB_URL}/rest/v1/products?active=eq.true&order=created_at.asc&limit=1&select=*`,
+        { headers: { 'apikey': SB_ANON, 'Authorization': `Bearer ${SB_ANON}` } }
+      );
+      const [product] = await res.json();
+      if (!product || !product.images || product.images.length === 0) return;
+
+      const imgs = product.images;
+
+      /* update main image */
+      const mainImg = document.getElementById('main-img');
+      mainImg.src = imgs[0];
+      mainImg.alt = product.name || 'חגורה אוטומטית ZIVOR';
+
+      /* rebuild thumbnails — parent of main-img's wrapper is the sticky gallery div */
+      const thumbsContainer = mainImg.parentElement.parentElement.querySelector('.grid-cols-4');
+      if (thumbsContainer) {
+        thumbsContainer.innerHTML = imgs.map((url, i) => `
+          <button class="thumb ${i===0?'on':''} rounded-xl overflow-hidden aspect-square" onclick="swImg(this,'${url}')">
+            <img src="${url}" alt="${i+1}" class="w-full h-full object-cover" loading="lazy">
+          </button>`).join('');
+      }
+    } catch(e) { /* keep placeholders on error */ }
+  }
+
+  loadProduct();
 </script>
 
 </body>

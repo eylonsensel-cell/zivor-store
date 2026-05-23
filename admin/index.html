@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZIVOR — פאנל ניהול</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      bg:'#FAF6F2', surface:'#F2DDD1', accent:'#C4957A', 'accent-d':'#A87860',
+      ink:'#1C1C1C', 'ink-s':'#6B5B53', 'ink-m':'#9C8880', border:'#E8D5C8'
+    },
+    fontFamily: { sans: ['Heebo','sans-serif'] }
+  }}
+}
+</script>
+<style>
+* { font-family: 'Heebo', sans-serif; }
+.status-pending    { background:#FEF3C7; color:#92400E; }
+.status-paid       { background:#D1FAE5; color:#065F46; }
+.status-shipped    { background:#DBEAFE; color:#1E40AF; }
+.status-delivered  { background:#D1FAE5; color:#065F46; }
+.status-cancelled  { background:#FEE2E2; color:#991B1B; }
+.status-refunded   { background:#F3F4F6; color:#374151; }
+.status-processing { background:#EDE9FE; color:#5B21B6; }
+.status-test       { background:#FEF3C7; color:#92400E; border:1.5px dashed #F59E0B; }
+.drawer { transform: translateX(-110%); transition: transform .3s cubic-bezier(.22,1,.36,1); }
+.drawer.open { transform: translateX(0); }
+.img-thumb { position:relative; aspect-ratio:1; border-radius:8px; overflow:hidden; background:#F2DDD1; }
+.img-thumb img { width:100%; height:100%; object-fit:cover; }
+.img-thumb .remove-btn { position:absolute; top:4px; right:4px; background:rgba(0,0,0,.6); color:#fff; border-radius:50%; width:20px; height:20px; font-size:14px; line-height:20px; text-align:center; cursor:pointer; display:none; }
+.img-thumb:hover .remove-btn { display:block; }
+.upload-zone { border:2px dashed #E8D5C8; border-radius:12px; padding:20px; text-align:center; cursor:pointer; transition:border-color .2s; }
+.upload-zone:hover, .upload-zone.drag { border-color:#C4957A; background:#FAF6F2; }
+.upload-zone input { display:none; }
+</style>
+</head>
+<body class="bg-bg text-ink min-h-screen">
+
+<!-- LOGIN -->
+<div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-sm border border-border">
+    <div class="text-center mb-8">
+      <h1 class="text-2xl font-black tracking-tight">ZIVOR</h1>
+      <p class="text-ink-m text-sm mt-1">פאנל ניהול</p>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">אימייל</label>
+        <input id="login-email" type="email" placeholder="zivorilstore@gmail.com"
+          class="w-full border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent">
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">סיסמה</label>
+        <input id="login-pass" type="password" placeholder="••••••••"
+          class="w-full border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent"
+          onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button onclick="doLogin()" id="login-btn"
+        class="w-full bg-ink text-white rounded-xl py-3 font-semibold hover:bg-accent transition-colors">
+        כניסה
+      </button>
+      <p id="login-err" class="text-red-500 text-sm text-center hidden"></p>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+
+  <!-- Navbar -->
+  <nav class="bg-white border-b border-border sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <span class="font-black text-xl">ZIVOR</span>
+        <div class="flex gap-1">
+          <button onclick="showTab('orders')" data-tab="orders"
+            class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors">הזמנות</button>
+          <button onclick="showTab('products')" data-tab="products"
+            class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors">מוצרים</button>
+        </div>
+      </div>
+      <button onclick="doLogout()" class="text-ink-m hover:text-ink text-sm">התנתק</button>
+    </div>
+  </nav>
+
+  <!-- ORDERS TAB -->
+  <div id="tab-orders" class="max-w-7xl mx-auto px-4 py-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white rounded-2xl border border-border p-5">
+        <p class="text-ink-m text-xs mb-1">הזמנות היום</p>
+        <p id="stat-today" class="text-3xl font-black">—</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-border p-5">
+        <p class="text-ink-m text-xs mb-1">הכנסה היום</p>
+        <p id="stat-revenue" class="text-3xl font-black">—</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-border p-5">
+        <p class="text-ink-m text-xs mb-1">ממתינות לשליחה</p>
+        <p id="stat-pending" class="text-3xl font-black">—</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-border p-5">
+        <p class="text-ink-m text-xs mb-1">סה"כ הזמנות</p>
+        <p id="stat-total" class="text-3xl font-black">—</p>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-3 mb-5">
+      <select id="filter-status" onchange="loadOrders()"
+        class="border border-border rounded-xl px-4 py-2 text-sm bg-white focus:outline-none focus:border-accent">
+        <option value="">כל הסטטוסים</option>
+        <option value="pending">ממתין לתשלום</option>
+        <option value="paid">שולם</option>
+        <option value="processing">בטיפול</option>
+        <option value="shipped">נשלח</option>
+        <option value="delivered">נמסר</option>
+        <option value="cancelled">בוטל</option>
+        <option value="refunded">הוחזר</option>
+        <option value="test">🧪 הזמנות בדיקה</option>
+      </select>
+      <input id="filter-search" oninput="loadOrders()" type="text" placeholder="חיפוש לפי שם / אימייל..."
+        class="border border-border rounded-xl px-4 py-2 text-sm bg-white focus:outline-none focus:border-accent flex-1 min-w-48">
+      <button onclick="loadOrders()" class="bg-ink text-white rounded-xl px-5 py-2 text-sm font-medium hover:bg-accent transition-colors">רענן</button>
+    </div>
+    <div class="bg-white rounded-2xl border border-border overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-surface/50 border-b border-border">
+            <tr>
+              <th class="text-right px-5 py-3 font-semibold text-ink-s">#</th>
+              <th class="text-right px-5 py-3 font-semibold text-ink-s">לקוח</th>
+              <th class="text-right px-5 py-3 font-semibold text-ink-s">פריטים</th>
+              <th class="text-right px-5 py-3 font-semibold text-ink-s">סכום</th>
+              <th class="text-right px-5 py-3 font-semibold text-ink-s">סטטוס</th>
+              <th class="text-right px-5 py-3 font-semibold text-ink-s">תאריך</th>
+              <th class="text-right px-5 py-3 font-semibold text-ink-s">פעולות</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody">
+            <tr><td colspan="7" class="text-center py-12 text-ink-m">טוען הזמנות...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCTS TAB -->
+  <div id="tab-products" class="max-w-7xl mx-auto px-4 py-8 hidden">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-xl font-bold">מוצרים</h2>
+      <button onclick="openProductDrawer()" class="bg-ink text-white rounded-xl px-5 py-2.5 text-sm font-medium hover:bg-accent transition-colors">+ מוצר חדש</button>
+    </div>
+    <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="text-center py-12 text-ink-m">טוען מוצרים...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER DETAIL MODAL -->
+<div id="order-modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/50" onclick="closeOrderModal()"></div>
+  <div class="absolute top-0 end-0 h-full w-full max-w-lg bg-white shadow-2xl overflow-y-auto">
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-bold" id="modal-title">פרטי הזמנה</h2>
+        <button onclick="closeOrderModal()" class="text-ink-m hover:text-ink text-2xl leading-none">&times;</button>
+      </div>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT SIDE DRAWER -->
+<div id="product-drawer-overlay" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/40" onclick="closeProductDrawer()"></div>
+  <div id="product-drawer" class="drawer absolute top-0 left-0 h-full w-full max-w-xl bg-white shadow-2xl overflow-y-auto flex flex-col">
+
+    <!-- Drawer Header -->
+    <div class="flex items-center justify-between p-5 border-b border-border sticky top-0 bg-white z-10">
+      <h2 class="text-lg font-bold" id="drawer-title">מוצר חדש</h2>
+      <button onclick="closeProductDrawer()" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface transition-colors text-ink-m hover:text-ink">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Drawer Body -->
+    <div class="flex-1 p-5 overflow-y-auto">
+      <form id="product-form" onsubmit="saveProduct(event)" class="space-y-5">
+        <input type="hidden" id="prod-id">
+
+        <!-- Images -->
+        <div>
+          <label class="block text-sm font-semibold mb-3">תמונות המוצר</label>
+
+          <!-- Image previews grid -->
+          <div id="images-preview" class="grid grid-cols-4 gap-2 mb-3"></div>
+
+          <!-- Upload zone -->
+          <label id="upload-zone" class="upload-zone block"
+            ondragover="event.preventDefault();this.classList.add('drag')"
+            ondragleave="this.classList.remove('drag')"
+            ondrop="handleDrop(event)">
+            <input type="file" accept="image/*" multiple onchange="handleImageUpload(this.files)">
+            <div id="upload-status" class="flex flex-col items-center gap-2 pointer-events-none">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+              </svg>
+              <span class="text-sm text-ink-m">גרור תמונות לכאן או <span class="text-accent font-medium">לחץ לבחירה</span></span>
+              <span class="text-xs text-ink-m">PNG, JPG, WebP — עד 5MB לתמונה</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- Name -->
+        <div>
+          <label class="block text-sm font-medium mb-1.5">שם המוצר <span class="text-red-400">*</span></label>
+          <input id="prod-name" type="text" required
+            class="w-full border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent transition-colors">
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="block text-sm font-medium mb-1.5">תיאור</label>
+          <textarea id="prod-desc" rows="3"
+            class="w-full border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent transition-colors resize-none"></textarea>
+        </div>
+
+        <!-- Price row -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1.5">מחיר (₪) <span class="text-red-400">*</span></label>
+            <div class="relative">
+              <span class="absolute start-3 top-1/2 -translate-y-1/2 text-ink-m text-sm">₪</span>
+              <input id="prod-price" type="number" required min="0"
+                class="w-full border border-border rounded-xl ps-8 pe-4 py-2.5 text-sm focus:outline-none focus:border-accent transition-colors">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1.5">מחיר מקורי (₪)</label>
+            <div class="relative">
+              <span class="absolute start-3 top-1/2 -translate-y-1/2 text-ink-m text-sm">₪</span>
+              <input id="prod-compare" type="number" min="0"
+                class="w-full border border-border rounded-xl ps-8 pe-4 py-2.5 text-sm focus:outline-none focus:border-accent transition-colors">
+            </div>
+          </div>
+        </div>
+
+        <!-- Stock -->
+        <div>
+          <label class="block text-sm font-medium mb-1.5">מלאי</label>
+          <input id="prod-stock" type="number" min="0" value="99"
+            class="w-full border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent transition-colors">
+        </div>
+
+        <!-- Active toggle -->
+        <label class="flex items-center justify-between p-4 bg-surface/40 rounded-xl cursor-pointer">
+          <div>
+            <p class="text-sm font-medium">מוצר פעיל</p>
+            <p class="text-xs text-ink-m">מוצג באתר לקניה</p>
+          </div>
+          <div class="relative">
+            <input id="prod-active" type="checkbox" checked class="sr-only peer">
+            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-accent transition-colors"></div>
+            <div class="absolute top-0.5 start-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5 peer-checked:-translate-x-0 rtl:peer-checked:-translate-x-5 rtl:peer-checked:translate-x-0"></div>
+          </div>
+        </label>
+
+        <p id="prod-err" class="text-red-500 text-sm hidden"></p>
+      </form>
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="p-5 border-t border-border bg-white sticky bottom-0 flex gap-3">
+      <button onclick="saveProduct(event)" id="save-btn"
+        class="flex-1 bg-ink text-white rounded-xl py-3 font-semibold hover:bg-accent transition-colors text-sm">
+        שמור מוצר
+      </button>
+      <button onclick="closeProductDrawer()"
+        class="px-6 border border-border rounded-xl hover:bg-surface transition-colors text-sm font-medium">
+        ביטול
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://wqbozlhyobharxaduink.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_iKMQ4hUPt0uEuaWWzk7ObA_4Mh4HVGt';
+const STORAGE_BASE = `${SUPABASE_URL}/storage/v1/object/public/product-images`;
+
+let session = null;
+let productImages = []; // array of public URLs for current editing product
+
+const STATUS_HE = {
+  pending:'ממתין לתשלום', paid:'שולם', processing:'בטיפול',
+  shipped:'נשלח', delivered:'נמסר', cancelled:'בוטל', refunded:'הוחזר',
+  test:'🧪 בדיקה',
+};
+
+// ===== AUTH =====
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+  const btn   = document.getElementById('login-btn');
+  const err   = document.getElementById('login-err');
+  btn.textContent = 'מתחבר...'; btn.disabled = true; err.classList.add('hidden');
+
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON},
+    body: JSON.stringify({ email, password: pass }),
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    err.textContent = 'אימייל או סיסמה שגויים';
+    err.classList.remove('hidden');
+    btn.textContent = 'כניסה'; btn.disabled = false; return;
+  }
+  session = data.access_token;
+  localStorage.setItem('zivor_admin_token', session);
+  localStorage.setItem('zivor_admin_refresh', data.refresh_token);
+  showApp();
+}
+
+async function refreshSession() {
+  const rt = localStorage.getItem('zivor_admin_refresh');
+  if (!rt) { doLogout(); return false; }
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON},
+    body: JSON.stringify({ refresh_token: rt }),
+  });
+  if (!res.ok) { doLogout(); return false; }
+  const data = await res.json();
+  session = data.access_token;
+  localStorage.setItem('zivor_admin_token', session);
+  localStorage.setItem('zivor_admin_refresh', data.refresh_token);
+  return true;
+}
+
+function doLogout() {
+  session = null;
+  localStorage.removeItem('zivor_admin_token');
+  localStorage.removeItem('zivor_admin_refresh');
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('login-screen').classList.remove('hidden');
+}
+
+function showApp() {
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  showTab('orders');
+}
+
+async function initAuth() {
+  const saved = localStorage.getItem('zivor_admin_token');
+  if (!saved) return;
+  session = saved;
+  // Try a lightweight request to validate token; refresh if expired
+  const testRes = await fetch(`${SUPABASE_URL}/rest/v1/orders?limit=1`, {
+    headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${session}`},
+  });
+  if (testRes.status === 401 || testRes.status === 403) {
+    const ok = await refreshSession();
+    if (!ok) return;
+  }
+  showApp();
+}
+initAuth();
+
+// ===== TABS =====
+function showTab(tab) {
+  ['orders','products'].forEach(t => {
+    document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== tab);
+    const btn = document.querySelector(`[data-tab="${t}"]`);
+    btn.classList.toggle('bg-surface', t === tab);
+    btn.classList.toggle('text-ink', t === tab);
+    btn.classList.toggle('text-ink-m', t !== tab);
+  });
+  if (tab === 'orders') loadOrders();
+  if (tab === 'products') loadProducts();
+}
+
+// ===== SUPABASE =====
+async function sbFetch(path, opts={}, isRetry=false) {
+  const makeHeaders = () => ({
+    'apikey': SUPABASE_ANON,
+    'Authorization': `Bearer ${session}`,
+    'Content-Type': 'application/json',
+    'Prefer': 'return=representation',
+    ...(opts.headers||{}),
+  });
+
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { ...opts, headers: makeHeaders() });
+
+  if (!res.ok) {
+    const body = await res.text();
+    // Auto-refresh on JWT expired, retry once
+    if (!isRetry && (body.includes('JWT expired') || body.includes('PGRST303') || res.status === 401)) {
+      const ok = await refreshSession();
+      if (ok) return sbFetch(path, opts, true);
+      return null;
+    }
+    throw new Error(body);
+  }
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
+
+// ===== ORDERS =====
+function getTestOrders() {
+  try { return JSON.parse(localStorage.getItem('zivor_test_orders') || '[]'); } catch { return []; }
+}
+
+async function loadOrders() {
+  const status = document.getElementById('filter-status')?.value;
+  const search = document.getElementById('filter-search')?.value?.trim().toLowerCase();
+  const tbody = document.getElementById('orders-tbody');
+  tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-ink-m">טוען...</td></tr>`;
+
+  try {
+    let realOrders = [];
+    if (status !== 'test') {
+      let qs = 'orders?order=created_at.desc&limit=200';
+      if (status) qs += `&status=eq.${status}`;
+      if (search) qs += `&or=(customer_name.ilike.*${search}*,customer_email.ilike.*${search}*)`;
+      realOrders = (await sbFetch(qs)) || [];
+    }
+
+    let testOrders = status === 'test' || !status ? getTestOrders() : [];
+    if (search) testOrders = testOrders.filter(o =>
+      o.customer_name?.toLowerCase().includes(search) ||
+      o.customer_email?.toLowerCase().includes(search)
+    );
+
+    const all = [...testOrders, ...realOrders];
+    renderOrders(all);
+    loadStats();
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-red-400">${e.message}</td></tr>`;
+  }
+}
+
+function deleteTestOrder(id) {
+  if (!confirm('למחוק הזמנת בדיקה זו?')) return;
+  const orders = getTestOrders().filter(o => o.id !== id);
+  localStorage.setItem('zivor_test_orders', JSON.stringify(orders));
+  loadOrders();
+}
+
+function openTestOrder(id) {
+  const o = getTestOrders().find(o => o.id === id);
+  if (!o) return;
+  document.getElementById('order-modal').classList.remove('hidden');
+  const content = document.getElementById('modal-content');
+  const items = Array.isArray(o.items) ? o.items : [];
+  const date = new Date(o.created_at).toLocaleString('he-IL');
+  document.getElementById('modal-title').innerHTML = `הזמנה #${o.order_number} <span class="text-xs font-normal bg-amber-100 text-amber-700 border border-amber-300 border-dashed rounded-full px-2 py-0.5 ms-1">🧪 בדיקה</span>`;
+  content.innerHTML = `
+    <div class="space-y-5">
+      <div class="flex items-center gap-3 flex-wrap">
+        <span class="status-test text-xs font-medium px-3 py-1.5 rounded-full">🧪 הזמנת בדיקה</span>
+        <span class="text-ink-m text-sm">${date}</span>
+      </div>
+
+      <div class="bg-surface/40 rounded-xl p-4 space-y-1.5">
+        <h3 class="font-semibold mb-2">פרטי לקוח</h3>
+        <p class="text-sm"><span class="text-ink-m">שם:</span> ${o.customer_name}</p>
+        <p class="text-sm"><span class="text-ink-m">אימייל:</span> ${o.customer_email}</p>
+        ${o.customer_phone ? `<p class="text-sm"><span class="text-ink-m">טלפון:</span> ${o.customer_phone}</p>` : ''}
+      </div>
+
+      <div class="bg-surface/40 rounded-xl p-4 space-y-1.5">
+        <h3 class="font-semibold mb-2">כתובת משלוח</h3>
+        <p class="text-sm">${o.address || '—'}</p>
+        <p class="text-sm">${o.city || ''}${o.zip ? ' ' + o.zip : ''}</p>
+        ${o.notes ? `<p class="text-sm text-ink-m mt-1">הערה: ${o.notes}</p>` : ''}
+      </div>
+
+      <div class="bg-surface/40 rounded-xl p-4">
+        <h3 class="font-semibold mb-3">פריטים</h3>
+        <div class="space-y-2">
+          ${items.map(i => `
+            <div class="flex justify-between text-sm">
+              <span>${i.name}${i.colorStr ? ` (${i.colorStr})` : i.color ? ` (${i.color})` : ''} ×${i.qty}</span>
+              <span class="font-medium">₪${i.price * (i.qty||1)}</span>
+            </div>`).join('')}
+        </div>
+        <div class="border-t border-border mt-3 pt-3 space-y-1">
+          <div class="flex justify-between text-sm text-ink-m"><span>סכום ביניים</span><span>₪${o.subtotal}</span></div>
+          <div class="flex justify-between text-sm text-ink-m"><span>משלוח</span><span>${o.shipping === 0 ? 'חינם' : '₪' + o.shipping}</span></div>
+          <div class="flex justify-between font-bold"><span>סה"כ</span><span class="line-through text-ink-m">₪${o.total}</span></div>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800 text-center">
+        🧪 זוהי הזמנת בדיקה — לא בוצע תשלום אמיתי
+        <div class="mt-3">
+          <button onclick="deleteTestOrder('${o.id}');closeOrderModal();"
+            class="text-xs text-red-500 hover:text-red-700 border border-red-200 rounded-lg px-3 py-1.5 hover:bg-red-50 transition-colors font-medium">
+            🗑 מחק הזמנה זו
+          </button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderOrders(orders) {
+  const tbody = document.getElementById('orders-tbody');
+  if (!orders?.length) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-ink-m">אין הזמנות עדיין</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = orders.map(o => {
+    const items = Array.isArray(o.items) ? o.items : [];
+    const summary = items.map(i => `${i.name} ×${i.qty}`).join(', ');
+    const date = new Date(o.created_at).toLocaleDateString('he-IL',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});
+    const isTest = o.is_test === true;
+    const rowClick = isTest ? `onclick="openTestOrder('${o.id}')"` : `onclick="openOrder('${o.id}')"`;
+    const actionsCell = isTest
+      ? `<button onclick="event.stopPropagation();deleteTestOrder('${o.id}')"
+           class="text-xs text-red-500 hover:text-red-700 border border-red-200 rounded-lg px-2.5 py-1 hover:bg-red-50 transition-colors font-medium">
+           🗑 מחק
+         </button>`
+      : `<select onchange="updateOrderStatus('${o.id}',this.value)" onclick="event.stopPropagation()"
+           class="border border-border rounded-lg px-2 py-1 text-xs bg-white focus:outline-none">
+           ${Object.entries(STATUS_HE).filter(([v])=>v!=='test').map(([v,l])=>`<option value="${v}" ${v===o.status?'selected':''}>${l}</option>`).join('')}
+         </select>`;
+    return `
+    <tr class="border-b border-border hover:bg-surface/30 ${isTest?'bg-amber-50/40':''} cursor-pointer" ${rowClick}>
+      <td class="px-5 py-4 font-mono text-ink-m text-xs">#${o.order_number}</td>
+      <td class="px-5 py-4"><div class="font-medium">${o.customer_name}</div><div class="text-ink-m text-xs">${o.customer_email}</div></td>
+      <td class="px-5 py-4 text-ink-s text-xs max-w-xs truncate">${summary}</td>
+      <td class="px-5 py-4 font-semibold">${isTest?`<span class="line-through text-ink-m">₪${o.total}</span>`:`₪${o.total}`}</td>
+      <td class="px-5 py-4"><span class="status-${o.status} text-xs font-medium px-2.5 py-1 rounded-full">${STATUS_HE[o.status]||o.status}</span></td>
+      <td class="px-5 py-4 text-ink-m text-xs">${date}</td>
+      <td class="px-5 py-4">${actionsCell}</td>
+    </tr>`;
+  }).join('');
+}
+
+async function loadStats() {
+  try {
+    const all = (await sbFetch('orders?select=status,total,created_at')) || [];
+    const today = new Date().toISOString().split('T')[0];
+    const todayOrders = all.filter(o => o.created_at.startsWith(today));
+    const todayRev = todayOrders.filter(o => ['paid','shipped','delivered'].includes(o.status)).reduce((s,o)=>s+o.total,0);
+    const pending = all.filter(o => ['paid','processing'].includes(o.status)).length;
+    const testCount = getTestOrders().length;
+    document.getElementById('stat-today').textContent = todayOrders.length;
+    document.getElementById('stat-revenue').textContent = `₪${todayRev.toLocaleString('he')}`;
+    document.getElementById('stat-pending').textContent = pending;
+    document.getElementById('stat-total').textContent = all.length + (testCount ? ` (+${testCount} 🧪)` : '');
+  } catch(e) {}
+}
+
+async function updateOrderStatus(id, status) {
+  try {
+    await sbFetch(`orders?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ status }) });
+    loadStats();
+  } catch(e) { alert('שגיאה: '+e.message); }
+}
+
+async function openOrder(id) {
+  document.getElementById('order-modal').classList.remove('hidden');
+  const content = document.getElementById('modal-content');
+  content.innerHTML = '<div class="text-center py-8 text-ink-m">טוען...</div>';
+  try {
+    const [o] = await sbFetch(`orders?id=eq.${id}`);
+    const items = Array.isArray(o.items) ? o.items : [];
+    const date = new Date(o.created_at).toLocaleString('he-IL');
+    document.getElementById('modal-title').textContent = `הזמנה #${o.order_number}`;
+    content.innerHTML = `
+      <div class="space-y-5">
+        <div class="flex items-center gap-3">
+          <span class="status-${o.status} text-xs font-medium px-3 py-1.5 rounded-full">${STATUS_HE[o.status]}</span>
+          <span class="text-ink-m text-sm">${date}</span>
+        </div>
+        <div class="bg-surface/40 rounded-xl p-4 space-y-1.5">
+          <h3 class="font-semibold mb-2">פרטי לקוח</h3>
+          <p class="text-sm"><span class="text-ink-m">שם:</span> ${o.customer_name}</p>
+          <p class="text-sm"><span class="text-ink-m">אימייל:</span> ${o.customer_email}</p>
+          ${o.customer_phone?`<p class="text-sm"><span class="text-ink-m">טלפון:</span> ${o.customer_phone}</p>`:''}
+          ${o.address?`<p class="text-sm"><span class="text-ink-m">כתובת:</span> ${o.address}, ${o.city} ${o.zip||''}</p>`:''}
+        </div>
+        <div class="bg-surface/40 rounded-xl p-4">
+          <h3 class="font-semibold mb-3">פריטים</h3>
+          <div class="space-y-2">
+            ${items.map(i=>`<div class="flex justify-between text-sm"><span>${i.name} ${i.color?`(${i.color})`:''} ×${i.qty}</span><span class="font-medium">₪${i.price*i.qty}</span></div>`).join('')}
+          </div>
+          <div class="border-t border-border mt-3 pt-3 space-y-1">
+            <div class="flex justify-between text-sm text-ink-m"><span>סכום ביניים</span><span>₪${o.subtotal}</span></div>
+            <div class="flex justify-between text-sm text-ink-m"><span>משלוח</span><span>${o.shipping===0?'חינם':'₪'+o.shipping}</span></div>
+            <div class="flex justify-between font-bold"><span>סה"כ</span><span>₪${o.total}</span></div>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">עדכן סטטוס</label>
+          <select onchange="updateOrderStatus('${o.id}',this.value);loadOrders();"
+            class="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:border-accent">
+            ${Object.entries(STATUS_HE).map(([v,l])=>`<option value="${v}" ${v===o.status?'selected':''}>${l}</option>`).join('')}
+          </select>
+        </div>
+      </div>`;
+  } catch(e) { content.innerHTML = `<p class="text-red-400">${e.message}</p>`; }
+}
+
+function closeOrderModal() {
+  document.getElementById('order-modal').classList.add('hidden');
+  loadOrders();
+}
+
+// ===== PRODUCTS =====
+async function loadProducts() {
+  const grid = document.getElementById('products-grid');
+  grid.innerHTML = '<div class="text-center py-12 text-ink-m col-span-3">טוען...</div>';
+  try {
+    const products = await sbFetch('products?order=created_at.desc');
+    if (!products?.length) {
+      grid.innerHTML = '<div class="text-center py-12 text-ink-m col-span-3">אין מוצרים עדיין — לחץ "+ מוצר חדש"</div>';
+      return;
+    }
+    grid.innerHTML = products.map(p => `
+      <div class="bg-white rounded-2xl border border-border overflow-hidden group">
+        <div class="aspect-square bg-surface relative overflow-hidden">
+          ${p.images?.[0]
+            ? `<img src="${p.images[0]}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">`
+            : '<div class="w-full h-full flex items-center justify-center text-ink-m text-sm">אין תמונה</div>'}
+          <span class="absolute top-2 start-2 text-xs px-2 py-0.5 rounded-full font-medium ${p.active?'bg-green-100 text-green-700':'bg-red-100 text-red-600'}">${p.active?'פעיל':'מוסתר'}</span>
+        </div>
+        <div class="p-4">
+          <h3 class="font-semibold text-sm mb-1 truncate">${p.name}</h3>
+          <p class="text-ink-m text-xs mb-3 line-clamp-2">${p.description||''}</p>
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-bold">₪${p.price}</span>
+              ${p.compare_price?`<span class="text-ink-m line-through text-xs ms-1">₪${p.compare_price}</span>`:''}
+            </div>
+            <div class="flex gap-2">
+              <button onclick="openProductDrawer('${p.id}')"
+                class="text-xs border border-border rounded-lg px-3 py-1.5 hover:bg-surface hover:border-accent transition-colors font-medium">עריכה</button>
+              <button onclick="toggleProduct('${p.id}',${!p.active})"
+                class="text-xs border border-border rounded-lg px-3 py-1.5 hover:bg-surface transition-colors">${p.active?'הסתר':'הפעל'}</button>
+            </div>
+          </div>
+          <p class="text-ink-m text-xs mt-2">מלאי: ${p.stock} יח׳</p>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    grid.innerHTML = `<div class="text-red-400 col-span-3">${e.message}</div>`;
+  }
+}
+
+// ===== IMAGE UPLOAD =====
+async function uploadImage(file) {
+  if (file.size > 5 * 1024 * 1024) { alert(`${file.name} גדול מ-5MB, דלג`); return null; }
+  const ext = file.name.split('.').pop().toLowerCase();
+  const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+  setUploadStatus(`מעלה ${file.name}...`);
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/product-images/${filename}`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${session}`, 'Content-Type': file.type },
+    body: file,
+  });
+  if (!res.ok) { const err = await res.text(); throw new Error(err); }
+  return `${STORAGE_BASE}/${filename}`;
+}
+
+function setUploadStatus(msg) {
+  document.getElementById('upload-status').innerHTML = msg
+    ? `<span class="text-sm text-accent">${msg}</span>`
+    : `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+       <span class="text-sm text-ink-m">גרור תמונות לכאן או <span class="text-accent font-medium">לחץ לבחירה</span></span>
+       <span class="text-xs text-ink-m">PNG, JPG, WebP — עד 5MB לתמונה</span>`;
+}
+
+async function handleImageUpload(files) {
+  const zone = document.getElementById('upload-zone');
+  zone.style.pointerEvents = 'none';
+  for (const file of Array.from(files)) {
+    try {
+      const url = await uploadImage(file);
+      if (url) { productImages.push(url); renderImagePreviews(); }
+    } catch(e) { alert('שגיאה בהעלאה: ' + e.message); }
+  }
+  setUploadStatus('');
+  zone.style.pointerEvents = '';
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag');
+  handleImageUpload(e.dataTransfer.files);
+}
+
+function renderImagePreviews() {
+  const container = document.getElementById('images-preview');
+  container.innerHTML = productImages.map((url, i) => `
+    <div class="img-thumb">
+      <img src="${url}" alt="">
+      <div class="remove-btn" onclick="removeImage(${i})">×</div>
+    </div>`).join('');
+  // Add placeholder slots
+  const remaining = Math.max(0, 4 - productImages.length);
+  for (let i = 0; i < remaining && productImages.length > 0; i++) {
+    container.innerHTML += `<div class="img-thumb flex items-center justify-center text-ink-m text-2xl border-2 border-dashed border-border cursor-pointer" onclick="document.querySelector('#upload-zone input').click()">+</div>`;
+  }
+}
+
+function removeImage(idx) {
+  productImages.splice(idx, 1);
+  renderImagePreviews();
+}
+
+// ===== PRODUCT DRAWER =====
+async function openProductDrawer(id = null) {
+  productImages = [];
+  renderImagePreviews();
+  setUploadStatus('');
+  document.getElementById('product-form').reset();
+  document.getElementById('prod-id').value = '';
+  document.getElementById('prod-stock').value = 99;
+  document.getElementById('prod-active').checked = true;
+  document.getElementById('prod-err').classList.add('hidden');
+  document.getElementById('drawer-title').textContent = id ? 'עריכת מוצר' : 'מוצר חדש';
+
+  if (id) {
+    try {
+      const [p] = await sbFetch(`products?id=eq.${id}`);
+      document.getElementById('prod-id').value = p.id;
+      document.getElementById('prod-name').value = p.name;
+      document.getElementById('prod-desc').value = p.description || '';
+      document.getElementById('prod-price').value = p.price;
+      document.getElementById('prod-compare').value = p.compare_price || '';
+      document.getElementById('prod-stock').value = p.stock;
+      document.getElementById('prod-active').checked = p.active;
+      productImages = [...(p.images || [])];
+      renderImagePreviews();
+    } catch(e) { alert('שגיאה בטעינה'); return; }
+  }
+
+  const overlay = document.getElementById('product-drawer-overlay');
+  overlay.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(() => document.getElementById('product-drawer').classList.add('open'));
+}
+
+function closeProductDrawer() {
+  document.getElementById('product-drawer').classList.remove('open');
+  setTimeout(() => {
+    document.getElementById('product-drawer-overlay').classList.add('hidden');
+    document.body.style.overflow = '';
+  }, 300);
+}
+
+async function saveProduct(e) {
+  e?.preventDefault();
+  const id = document.getElementById('prod-id').value;
+  const errEl = document.getElementById('prod-err');
+  const btn = document.getElementById('save-btn');
+  errEl.classList.add('hidden');
+  btn.textContent = 'שומר...'; btn.disabled = true;
+
+  const data = {
+    name: document.getElementById('prod-name').value.trim(),
+    description: document.getElementById('prod-desc').value.trim(),
+    price: parseInt(document.getElementById('prod-price').value) || 0,
+    compare_price: parseInt(document.getElementById('prod-compare').value) || null,
+    stock: parseInt(document.getElementById('prod-stock').value) || 0,
+    images: productImages,
+    active: document.getElementById('prod-active').checked,
+  };
+
+  try {
+    if (id) {
+      await sbFetch(`products?id=eq.${id}`, { method:'PATCH', body: JSON.stringify(data) });
+    } else {
+      await sbFetch('products', { method:'POST', body: JSON.stringify(data) });
+    }
+    closeProductDrawer();
+    loadProducts();
+  } catch(e) {
+    errEl.textContent = 'שגיאה בשמירה: ' + e.message;
+    errEl.classList.remove('hidden');
+  } finally {
+    btn.textContent = 'שמור מוצר'; btn.disabled = false;
+  }
+}
+
+async function toggleProduct(id, active) {
+  try {
+    await sbFetch(`products?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ active }) });
+    loadProducts();
+  } catch(e) { alert('שגיאה: '+e.message); }
+}
+</script>
+</body>
+</html>
