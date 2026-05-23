@@ -168,7 +168,7 @@ export default async function handler(req) {
     }
 
     return new Response(
-      JSON.stringify({ success: true, order_id: order.id, order_number: order.order_number }),
+      JSON.stringify({ success: true, order_id: order.id, order_number: order.order_number, email_attempted: !!RESEND_KEY }),
       { status: 200, headers: cors }
     );
 
