@@ -81,6 +81,8 @@ tailwind.config = {
             class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors">הזמנות</button>
           <button onclick="showTab('products')" data-tab="products"
             class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors">מוצרים</button>
+          <button onclick="showTab('analytics')" data-tab="analytics"
+            class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors">📊 סטטיסטיקות</button>
         </div>
       </div>
       <button onclick="doLogout()" class="text-ink-m hover:text-ink text-sm">התנתק</button>
@@ -156,6 +158,78 @@ tailwind.config = {
       <div class="text-center py-12 text-ink-m">טוען מוצרים...</div>
     </div>
   </div>
+
+  <!-- ANALYTICS TAB -->
+  <div id="tab-analytics" class="max-w-7xl mx-auto px-4 py-8 hidden">
+
+    <!-- Live KPIs -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white rounded-2xl border border-border p-5 relative overflow-hidden">
+        <div class="absolute top-3 start-3 w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+        <p class="text-ink-m text-xs mb-1 mt-1">גולשים עכשיו</p>
+        <p id="an-live" class="text-3xl font-black">—</p>
+        <p class="text-xs text-ink-m mt-1">ב-5 דקות האחרונות</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-border p-5">
+        <p class="text-ink-m text-xs mb-1">ביקורים היום</p>
+        <p id="an-today-views" class="text-3xl font-black">—</p>
+        <p class="text-xs text-ink-m mt-1">סשנים ייחודיים</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-border p-5">
+        <p class="text-ink-m text-xs mb-1">הכנסה השבוע</p>
+        <p id="an-week-rev" class="text-3xl font-black">—</p>
+        <p class="text-xs text-ink-m mt-1">מהזמנות ששולמו</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-border p-5">
+        <p class="text-ink-m text-xs mb-1">המרה (צ׳קאאוט)</p>
+        <p id="an-conversion" class="text-3xl font-black">—</p>
+        <p class="text-xs text-ink-m mt-1">ביקורים שהגיעו לצ׳קאאוט</p>
+      </div>
+    </div>
+
+    <!-- Revenue Chart -->
+    <div class="bg-white rounded-2xl border border-border p-6 mb-6">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-bold text-base">הכנסות לאורך זמן</h3>
+        <div class="flex gap-1 bg-surface rounded-xl p-1">
+          <button onclick="setChartRange(7)"  id="range-7"  class="chart-range-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors bg-white text-ink shadow-sm">7 ימים</button>
+          <button onclick="setChartRange(30)" id="range-30" class="chart-range-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors text-ink-m">30 ימים</button>
+          <button onclick="setChartRange(90)" id="range-90" class="chart-range-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors text-ink-m">90 ימים</button>
+        </div>
+      </div>
+      <div id="revenue-chart" class="flex items-end gap-1.5 h-40 w-full">
+        <div class="text-ink-m text-sm text-center w-full py-8">טוען נתונים...</div>
+      </div>
+      <div id="revenue-chart-labels" class="flex gap-1.5 mt-2 w-full"></div>
+    </div>
+
+    <!-- Bottom row -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Pages breakdown -->
+      <div class="bg-white rounded-2xl border border-border p-6">
+        <h3 class="font-bold text-base mb-4">עמודים פופולריים</h3>
+        <div id="an-pages" class="space-y-3">
+          <div class="text-ink-m text-sm text-center py-4">טוען...</div>
+        </div>
+      </div>
+
+      <!-- GA4 link -->
+      <div class="bg-white rounded-2xl border border-border p-6 flex flex-col items-center justify-center gap-4 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-[#E37400]/10 flex items-center justify-center text-2xl">📈</div>
+        <div>
+          <p class="font-bold mb-1">Google Analytics 4</p>
+          <p class="text-sm text-ink-m">דוחות מלאים — מקורות תנועה, מכשירים, מפות גיאוגרפיות ועוד</p>
+        </div>
+        <a href="https://analytics.google.com" target="_blank"
+          class="bg-[#E37400] text-white rounded-xl px-5 py-2.5 text-sm font-semibold hover:bg-[#c96600] transition-colors">
+          פתח Google Analytics ↗
+        </a>
+        <p class="text-xs text-ink-m">Property: ZIVOR Store · G-4QNS24P372</p>
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
 <!-- ORDER DETAIL MODAL -->
@@ -372,15 +446,17 @@ initAuth();
 
 // ===== TABS =====
 function showTab(tab) {
-  ['orders','products'].forEach(t => {
+  ['orders','products','analytics'].forEach(t => {
     document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== tab);
     const btn = document.querySelector(`[data-tab="${t}"]`);
+    if (!btn) return;
     btn.classList.toggle('bg-surface', t === tab);
     btn.classList.toggle('text-ink', t === tab);
     btn.classList.toggle('text-ink-m', t !== tab);
   });
-  if (tab === 'orders') loadOrders();
-  if (tab === 'products') loadProducts();
+  if (tab === 'orders')    loadOrders();
+  if (tab === 'products')  loadProducts();
+  if (tab === 'analytics') loadAnalytics();
 }
 
 // ===== SUPABASE =====
@@ -795,6 +871,130 @@ async function toggleProduct(id, active) {
     await sbFetch(`products?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ active }) });
     loadProducts();
   } catch(e) { alert('שגיאה: '+e.message); }
+}
+
+// ===== ANALYTICS =====
+let chartRange = 7;
+let analyticsTimer = null;
+
+async function loadAnalytics() {
+  clearInterval(analyticsTimer);
+  await Promise.all([loadLiveVisitors(), loadRevenueChart(chartRange), loadPageBreakdown()]);
+  analyticsTimer = setInterval(loadLiveVisitors, 30000); // refresh live every 30s
+}
+
+async function loadLiveVisitors() {
+  try {
+    const fiveMinAgo = new Date(Date.now() - 5*60*1000).toISOString();
+    const today      = new Date().toISOString().split('T')[0];
+
+    const [liveRows, todayRows, checkoutRows] = await Promise.all([
+      sbFetch(`page_views?select=session_id&created_at=gte.${fiveMinAgo}`),
+      sbFetch(`page_views?select=session_id&created_at=gte.${today}T00:00:00`),
+      sbFetch(`page_views?select=session_id&page=eq./checkout&created_at=gte.${today}T00:00:00`),
+    ]);
+
+    const uniq = arr => new Set((arr||[]).map(r=>r.session_id)).size;
+    const liveCount    = uniq(liveRows);
+    const todayCount   = uniq(todayRows);
+    const checkoutCount= uniq(checkoutRows);
+    const conversion   = todayCount > 0 ? Math.round(checkoutCount/todayCount*100) : 0;
+
+    document.getElementById('an-live').textContent        = liveCount;
+    document.getElementById('an-today-views').textContent = todayCount;
+    document.getElementById('an-conversion').textContent  = conversion + '%';
+  } catch(e) { console.error(e); }
+}
+
+async function loadRevenueChart(days) {
+  const chart  = document.getElementById('revenue-chart');
+  const labels = document.getElementById('revenue-chart-labels');
+  chart.innerHTML = '<div class="text-ink-m text-sm text-center w-full py-8">טוען...</div>';
+
+  try {
+    const since = new Date(Date.now() - days*24*60*60*1000).toISOString();
+    const orders = (await sbFetch(`orders?select=total,status,created_at&created_at=gte.${since}`)) || [];
+    const realOrders = orders.filter(o => ['paid','shipped','delivered','processing'].includes(o.status));
+
+    // Build daily buckets
+    const buckets = {};
+    for (let i = days-1; i >= 0; i--) {
+      const d = new Date(Date.now() - i*24*60*60*1000);
+      const key = d.toISOString().split('T')[0];
+      buckets[key] = 0;
+    }
+    realOrders.forEach(o => {
+      const key = o.created_at.split('T')[0];
+      if (key in buckets) buckets[key] += o.total;
+    });
+
+    const entries  = Object.entries(buckets);
+    const maxVal   = Math.max(...entries.map(([,v])=>v), 1);
+    const weekRev  = entries.slice(-7).reduce((s,[,v])=>s+v,0);
+    document.getElementById('an-week-rev').textContent = '₪'+weekRev.toLocaleString('he');
+
+    // Render bars
+    const barW = days <= 7 ? 'flex-1' : days <= 30 ? 'flex-1' : 'flex-1';
+    chart.innerHTML = entries.map(([date, val]) => {
+      const pct  = Math.max(val/maxVal*100, val>0?4:1);
+      const isToday = date === new Date().toISOString().split('T')[0];
+      return `<div class="flex flex-col items-center justify-end h-full ${barW} gap-1 group" title="₪${val} — ${date}">
+        ${val>0?`<span class="text-[10px] text-ink-m opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">₪${val}</span>`:''}
+        <div class="w-full rounded-t-lg transition-all duration-500 ${isToday?'bg-accent':'bg-surface border-t-2 border-accent/30'}"
+          style="height:${pct}%"></div>
+      </div>`;
+    }).join('');
+
+    const labelStep = days <= 7 ? 1 : days <= 30 ? 5 : 15;
+    labels.innerHTML = entries.map(([date], i) => {
+      if (i % labelStep !== 0 && i !== entries.length-1) return `<div class="${barW}"></div>`;
+      const d = new Date(date);
+      const lbl = days <= 7
+        ? d.toLocaleDateString('he-IL',{weekday:'short'})
+        : `${d.getDate()}/${d.getMonth()+1}`;
+      return `<div class="${barW} text-center text-[10px] text-ink-m truncate">${lbl}</div>`;
+    }).join('');
+
+  } catch(e) {
+    chart.innerHTML = `<div class="text-red-400 text-sm text-center w-full py-8">${e.message}</div>`;
+  }
+}
+
+async function loadPageBreakdown() {
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const rows  = (await sbFetch(`page_views?select=page,session_id&created_at=gte.${today}T00:00:00`)) || [];
+    const counts = {};
+    rows.forEach(r => { counts[r.page] = (counts[r.page]||new Set()); counts[r.page].add(r.session_id); });
+    const sorted = Object.entries(counts).map(([p,s])=>({page:p,count:s.size})).sort((a,b)=>b.count-a.count);
+    const total  = sorted.reduce((s,r)=>s+r.count,0)||1;
+    const names  = { '/':'🏠 דף הבית', '/checkout':'🛒 צ׳קאאוט' };
+    document.getElementById('an-pages').innerHTML = sorted.length
+      ? sorted.map(r=>`
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="font-medium">${names[r.page]||r.page}</span>
+            <span class="text-ink-m">${r.count} ביקורים</span>
+          </div>
+          <div class="h-2 bg-surface rounded-full overflow-hidden">
+            <div class="h-full bg-accent rounded-full transition-all duration-700" style="width:${Math.round(r.count/total*100)}%"></div>
+          </div>
+        </div>`).join('')
+      : '<p class="text-ink-m text-sm text-center py-4">אין נתונים להיום עדיין</p>';
+  } catch(e) {}
+}
+
+function setChartRange(days) {
+  chartRange = days;
+  [7,30,90].forEach(d => {
+    const btn = document.getElementById(`range-${d}`);
+    if (!btn) return;
+    btn.classList.toggle('bg-white',   d === days);
+    btn.classList.toggle('shadow-sm',  d === days);
+    btn.classList.toggle('text-ink',   d === days);
+    btn.classList.toggle('text-ink-m', d !== days);
+  });
+  loadRevenueChart(days);
 }
 </script>
 </body>

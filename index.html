@@ -1304,6 +1304,15 @@
   }
 
   loadProduct();
+
+  /* ── Page view tracking ── */
+  (function(){
+    const SB_URL  = 'https://wqbozlhyobharxaduink.supabase.co';
+    const SB_ANON = 'sb_publishable_iKMQ4hUPt0uEuaWWzk7ObA_4Mh4HVGt';
+    let sid = sessionStorage.getItem('zivor_sid');
+    if (!sid) { sid = Math.random().toString(36).slice(2)+Date.now().toString(36); sessionStorage.setItem('zivor_sid',sid); }
+    fetch(`${SB_URL}/rest/v1/page_views`,{method:'POST',headers:{'apikey':SB_ANON,'Authorization':`Bearer ${SB_ANON}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({session_id:sid,page:'/'})}).catch(()=>{});
+  })();
 </script>
 
 </body>
