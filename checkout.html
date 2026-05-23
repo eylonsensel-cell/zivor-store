@@ -569,7 +569,7 @@
           body: JSON.stringify({ ...orderPayload, test_mode: true }),
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'שגיאה');
+        if (!res.ok) throw new Error(JSON.stringify(data));
 
         sessionStorage.removeItem('zivor_cart');
         const orderNum = data.order_number || '—';
