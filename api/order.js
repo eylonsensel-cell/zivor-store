@@ -160,7 +160,8 @@ export default async function handler(req) {
         },
         body: JSON.stringify({
           from: 'ZIVOR <onboarding@resend.dev>',
-          to: [customer_email],
+          to: ['zivorilstore@gmail.com'],
+          reply_to: customer_email,
           subject: `${test_mode ? '[בדיקה] ' : ''}אישור הזמנה #${order.order_number} — ZIVOR`,
           html: emailHtml,
         }),
