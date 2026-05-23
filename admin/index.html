@@ -486,101 +486,85 @@ async function sbFetch(path, opts={}, isRetry=false) {
 }
 
 // ===== ORDERS =====
-function getTestOrders() {
-  try { return JSON.parse(localStorage.getItem('zivor_test_orders') || '[]'); } catch { return []; }
-}
-
 async function loadOrders() {
   const status = document.getElementById('filter-status')?.value;
-  const search = document.getElementById('filter-search')?.value?.trim().toLowerCase();
+  const search = document.getElementById('filter-search')?.value?.trim();
+  let qs = 'orders?order=created_at.desc&limit=200';
+  if (status) qs += `&status=eq.${status}`;
+  if (search) qs += `&or=(customer_name.ilike.*${search}*,customer_email.ilike.*${search}*)`;
   const tbody = document.getElementById('orders-tbody');
   tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-ink-m">טוען...</td></tr>`;
-
   try {
-    let realOrders = [];
-    if (status !== 'test') {
-      let qs = 'orders?order=created_at.desc&limit=200';
-      if (status) qs += `&status=eq.${status}`;
-      if (search) qs += `&or=(customer_name.ilike.*${search}*,customer_email.ilike.*${search}*)`;
-      realOrders = (await sbFetch(qs)) || [];
-    }
-
-    let testOrders = status === 'test' || !status ? getTestOrders() : [];
-    if (search) testOrders = testOrders.filter(o =>
-      o.customer_name?.toLowerCase().includes(search) ||
-      o.customer_email?.toLowerCase().includes(search)
-    );
-
-    const all = [...testOrders, ...realOrders];
-    renderOrders(all);
+    const orders = await sbFetch(qs);
+    renderOrders(orders);
     loadStats();
   } catch(e) {
     tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-red-400">${e.message}</td></tr>`;
   }
 }
 
-function deleteTestOrder(id) {
+async function deleteTestOrder(id) {
   if (!confirm('למחוק הזמנת בדיקה זו?')) return;
-  const orders = getTestOrders().filter(o => o.id !== id);
-  localStorage.setItem('zivor_test_orders', JSON.stringify(orders));
-  loadOrders();
+  try {
+    await sbFetch(`orders?id=eq.${id}`, { method: 'DELETE' });
+    loadOrders();
+  } catch(e) { alert('שגיאה: ' + e.message); }
 }
 
-function openTestOrder(id) {
-  const o = getTestOrders().find(o => o.id === id);
-  if (!o) return;
+async function openTestOrder(id) {
   document.getElementById('order-modal').classList.remove('hidden');
   const content = document.getElementById('modal-content');
-  const items = Array.isArray(o.items) ? o.items : [];
-  const date = new Date(o.created_at).toLocaleString('he-IL');
-  document.getElementById('modal-title').innerHTML = `הזמנה #${o.order_number} <span class="text-xs font-normal bg-amber-100 text-amber-700 border border-amber-300 border-dashed rounded-full px-2 py-0.5 ms-1">🧪 בדיקה</span>`;
-  content.innerHTML = `
-    <div class="space-y-5">
-      <div class="flex items-center gap-3 flex-wrap">
-        <span class="status-test text-xs font-medium px-3 py-1.5 rounded-full">🧪 הזמנת בדיקה</span>
-        <span class="text-ink-m text-sm">${date}</span>
-      </div>
-
-      <div class="bg-surface/40 rounded-xl p-4 space-y-1.5">
-        <h3 class="font-semibold mb-2">פרטי לקוח</h3>
-        <p class="text-sm"><span class="text-ink-m">שם:</span> ${o.customer_name}</p>
-        <p class="text-sm"><span class="text-ink-m">אימייל:</span> ${o.customer_email}</p>
-        ${o.customer_phone ? `<p class="text-sm"><span class="text-ink-m">טלפון:</span> ${o.customer_phone}</p>` : ''}
-      </div>
-
-      <div class="bg-surface/40 rounded-xl p-4 space-y-1.5">
-        <h3 class="font-semibold mb-2">כתובת משלוח</h3>
-        <p class="text-sm">${o.address || '—'}</p>
-        <p class="text-sm">${o.city || ''}${o.zip ? ' ' + o.zip : ''}</p>
-        ${o.notes ? `<p class="text-sm text-ink-m mt-1">הערה: ${o.notes}</p>` : ''}
-      </div>
-
-      <div class="bg-surface/40 rounded-xl p-4">
-        <h3 class="font-semibold mb-3">פריטים</h3>
-        <div class="space-y-2">
-          ${items.map(i => `
-            <div class="flex justify-between text-sm">
-              <span>${i.name}${i.colorStr ? ` (${i.colorStr})` : i.color ? ` (${i.color})` : ''} ×${i.qty}</span>
-              <span class="font-medium">₪${i.price * (i.qty||1)}</span>
-            </div>`).join('')}
+  content.innerHTML = '<div class="text-center py-8 text-ink-m">טוען...</div>';
+  try {
+    const [o] = await sbFetch(`orders?id=eq.${id}`);
+    const items = Array.isArray(o.items) ? o.items : [];
+    const date = new Date(o.created_at).toLocaleString('he-IL');
+    document.getElementById('modal-title').innerHTML = `הזמנה #${o.order_number} <span class="text-xs font-normal bg-amber-100 text-amber-700 border border-amber-300 border-dashed rounded-full px-2 py-0.5 ms-1">🧪 בדיקה</span>`;
+    content.innerHTML = `
+      <div class="space-y-5">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="status-test text-xs font-medium px-3 py-1.5 rounded-full">🧪 הזמנת בדיקה</span>
+          <span class="text-ink-m text-sm">${date}</span>
         </div>
-        <div class="border-t border-border mt-3 pt-3 space-y-1">
-          <div class="flex justify-between text-sm text-ink-m"><span>סכום ביניים</span><span>₪${o.subtotal}</span></div>
-          <div class="flex justify-between text-sm text-ink-m"><span>משלוח</span><span>${o.shipping === 0 ? 'חינם' : '₪' + o.shipping}</span></div>
-          <div class="flex justify-between font-bold"><span>סה"כ</span><span class="line-through text-ink-m">₪${o.total}</span></div>
+        <div class="bg-surface/40 rounded-xl p-4 space-y-1.5">
+          <h3 class="font-semibold mb-2">פרטי לקוח</h3>
+          <p class="text-sm"><span class="text-ink-m">שם:</span> ${o.customer_name}</p>
+          <p class="text-sm"><span class="text-ink-m">אימייל:</span> ${o.customer_email}</p>
+          ${o.customer_phone ? `<p class="text-sm"><span class="text-ink-m">טלפון:</span> ${o.customer_phone}</p>` : ''}
         </div>
-      </div>
-
-      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800 text-center">
-        🧪 זוהי הזמנת בדיקה — לא בוצע תשלום אמיתי
-        <div class="mt-3">
-          <button onclick="deleteTestOrder('${o.id}');closeOrderModal();"
-            class="text-xs text-red-500 hover:text-red-700 border border-red-200 rounded-lg px-3 py-1.5 hover:bg-red-50 transition-colors font-medium">
-            🗑 מחק הזמנה זו
-          </button>
+        <div class="bg-surface/40 rounded-xl p-4 space-y-1.5">
+          <h3 class="font-semibold mb-2">כתובת משלוח</h3>
+          <p class="text-sm">${o.address || '—'}</p>
+          <p class="text-sm">${o.city || ''}${o.zip ? ' ' + o.zip : ''}</p>
+          ${o.notes ? `<p class="text-sm text-ink-m mt-1">הערה: ${o.notes}</p>` : ''}
         </div>
-      </div>
-    </div>`;
+        <div class="bg-surface/40 rounded-xl p-4">
+          <h3 class="font-semibold mb-3">פריטים</h3>
+          <div class="space-y-2">
+            ${items.map(i => `
+              <div class="flex justify-between text-sm">
+                <span>${i.name}${i.colorStr ? ` (${i.colorStr})` : i.color ? ` (${i.color})` : ''} ×${i.qty||1}</span>
+                <span class="font-medium">₪${i.price*(i.qty||1)}</span>
+              </div>`).join('')}
+          </div>
+          <div class="border-t border-border mt-3 pt-3 space-y-1">
+            <div class="flex justify-between text-sm text-ink-m"><span>סכום ביניים</span><span>₪${o.subtotal}</span></div>
+            <div class="flex justify-between text-sm text-ink-m"><span>משלוח</span><span>${o.shipping===0?'חינם':'₪'+o.shipping}</span></div>
+            <div class="flex justify-between font-bold"><span>סה"כ</span><span class="line-through text-ink-m">₪${o.total}</span></div>
+          </div>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800 text-center">
+          🧪 זוהי הזמנת בדיקה — לא בוצע תשלום אמיתי
+          <div class="mt-3">
+            <button onclick="deleteTestOrder('${o.id}');closeOrderModal();"
+              class="text-xs text-red-500 hover:text-red-700 border border-red-200 rounded-lg px-3 py-1.5 hover:bg-red-50 transition-colors font-medium">
+              🗑 מחק הזמנה זו
+            </button>
+          </div>
+        </div>
+      </div>`;
+  } catch(e) { content.innerHTML = `<p class="text-red-400">${e.message}</p>`; }
+}
 }
 
 function renderOrders(orders) {
@@ -593,8 +577,8 @@ function renderOrders(orders) {
     const items = Array.isArray(o.items) ? o.items : [];
     const summary = items.map(i => `${i.name} ×${i.qty}`).join(', ');
     const date = new Date(o.created_at).toLocaleDateString('he-IL',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});
-    const isTest = o.is_test === true;
-    const rowClick = isTest ? `onclick="openTestOrder('${o.id}')"` : `onclick="openOrder('${o.id}')"`;
+    const isTest = o.status === 'test';
+    const rowClick = `onclick="${isTest ? `openTestOrder('${o.id}')` : `openOrder('${o.id}')`}"`;
     const actionsCell = isTest
       ? `<button onclick="event.stopPropagation();deleteTestOrder('${o.id}')"
            class="text-xs text-red-500 hover:text-red-700 border border-red-200 rounded-lg px-2.5 py-1 hover:bg-red-50 transition-colors font-medium">
@@ -624,11 +608,11 @@ async function loadStats() {
     const todayOrders = all.filter(o => o.created_at.startsWith(today));
     const todayRev = todayOrders.filter(o => ['paid','shipped','delivered'].includes(o.status)).reduce((s,o)=>s+o.total,0);
     const pending = all.filter(o => ['paid','processing'].includes(o.status)).length;
-    const testCount = getTestOrders().length;
-    document.getElementById('stat-today').textContent = todayOrders.length;
+    const testCount = all.filter(o => o.status === 'test').length;
+    document.getElementById('stat-today').textContent = todayOrders.filter(o=>o.status!=='test').length;
     document.getElementById('stat-revenue').textContent = `₪${todayRev.toLocaleString('he')}`;
     document.getElementById('stat-pending').textContent = pending;
-    document.getElementById('stat-total').textContent = all.length + (testCount ? ` (+${testCount} 🧪)` : '');
+    document.getElementById('stat-total').textContent = (all.length - testCount) + (testCount ? ` (+${testCount} 🧪)` : '');
   } catch(e) {}
 }
 

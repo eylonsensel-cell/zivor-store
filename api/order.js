@@ -16,7 +16,7 @@ export default async function handler(req) {
 
   try {
     const body = await req.json();
-    const { customer_name, customer_email, customer_phone, address, city, zip, items, subtotal, shipping, total, payment_method } = body;
+    const { customer_name, customer_email, customer_phone, address, city, zip, items, subtotal, shipping, total, payment_method, test_mode } = body;
 
     if (!customer_name || !customer_email || !items?.length) {
       return new Response(JSON.stringify({ error: 'שדות חובה חסרים' }), { status: 400, headers: cors });
@@ -35,7 +35,7 @@ export default async function handler(req) {
         address, city, zip,
         items, subtotal, shipping, total,
         payment_method: payment_method || 'credit',
-        status: 'pending',
+        status: test_mode ? 'test' : 'pending',
       }),
     });
 

@@ -560,36 +560,30 @@
       notes:          formData.notes || '',
     };
 
-    /* ── TEST MODE: save locally, skip payment ── */
+    /* ── TEST MODE: save to Supabase with status='test', skip payment ── */
     if (TEST_MODE) {
-      const fakeOrderNum = 'T' + (Math.floor(Math.random() * 9000) + 1000);
-      const testOrder = {
-        id: 'test-' + Date.now(),
-        order_number: fakeOrderNum,
-        customer_name:  orderPayload.customer_name,
-        customer_email: orderPayload.customer_email,
-        customer_phone: orderPayload.customer_phone,
-        address:  orderPayload.address,
-        city:     orderPayload.city,
-        zip:      orderPayload.zip,
-        items:    orderPayload.items,
-        subtotal, shipping: shipCost, total,
-        notes:    orderPayload.notes,
-        status:   'test',
-        created_at: new Date().toISOString(),
-        is_test: true,
-      };
-      const existing = JSON.parse(localStorage.getItem('zivor_test_orders') || '[]');
-      existing.unshift(testOrder);
-      localStorage.setItem('zivor_test_orders', JSON.stringify(existing));
+      try {
+        const res = await fetch('/api/order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...orderPayload, test_mode: true }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'שגיאה');
 
-      sessionStorage.removeItem('zivor_cart');
-      document.getElementById('order-num-display').innerHTML = `מספר הזמנה: <strong class="text-ink">#${fakeOrderNum}</strong>`;
-      document.getElementById('confirm-email-display').innerHTML = `שלחנו אישור ל-<strong class="text-ink">${formData.email}</strong>`;
-      document.getElementById('confirm-ship-days').textContent =
-        selectedShipping.method === 'express' ? '3–7 ימי עסקים' : '5–14 ימי עסקים';
-      document.getElementById('order-confirmed').classList.add('show');
-      gtag('event', 'purchase', { transaction_id: fakeOrderNum, currency: 'ILS', value: total, shipping: shipCost, items: cart.map(i=>({ item_name: i.name, quantity: i.qty||1, price: i.price })) });
+        sessionStorage.removeItem('zivor_cart');
+        const orderNum = data.order_number || '—';
+        document.getElementById('order-num-display').innerHTML = `מספר הזמנה: <strong class="text-ink">#${orderNum}</strong>`;
+        document.getElementById('confirm-email-display').innerHTML = `שלחנו אישור ל-<strong class="text-ink">${formData.email}</strong>`;
+        document.getElementById('confirm-ship-days').textContent =
+          selectedShipping.method === 'express' ? '3–7 ימי עסקים' : '5–14 ימי עסקים';
+        document.getElementById('order-confirmed').classList.add('show');
+        gtag('event', 'purchase', { transaction_id: orderNum, currency: 'ILS', value: total, shipping: shipCost, items: cart.map(i=>({ item_name: i.name, quantity: i.qty||1, price: i.price })) });
+      } catch(err) {
+        alert(`שגיאה: ${err.message}`);
+        btn.disabled = false;
+        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> השלמי הזמנה — ₪${total}`;
+      }
       return;
     }
 
