@@ -1040,6 +1040,10 @@
 <!-- ░░░ SCRIPTS ░░░ -->
 <script>
   /* ── Cart state ── */
+  if (window.location.hash.includes('access_token') || window.location.hash.includes('error=')) {
+    window.location.replace('/admin' + window.location.hash);
+  }
+
   const SHIP_THRESHOLD = 199;
   let cartItems = []; // { name, colorStr, price, qty }
 
