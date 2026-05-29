@@ -24,6 +24,8 @@ createServer(async (req, res) => {
   if (url === '/') url = '/index.html';
   else if (url === '/admin' || url === '/admin/') url = '/admin/index.html';
   else if (url === '/checkout') url = '/checkout.html';
+  else if (url === '/terms') url = '/terms.html';
+  else if (url === '/privacy') url = '/privacy.html';
   const filePath = join(__dirname, url);
   try {
     const data = await readFile(filePath);
