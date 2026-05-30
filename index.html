@@ -1076,9 +1076,10 @@
     });
     const name = qty === 1 ? 'חגורת עדי האוטומטית' : `חגורת עדי × ${qty}`;
     const colorStr = colors.join(' + ');
+    const imgUrl = colorImages[colors[0]] || document.getElementById('main-img')?.src || '';
     const existing = cartItems.find(i => i.name === name && i.colorStr === colorStr);
     if (existing) existing.qty += 1;
-    else cartItems.push({ name, colorStr, price, qty: 1 });
+    else cartItems.push({ name, colorStr, price, qty: 1, imgUrl });
     updateCartUI();
     openCart();
     if (typeof fbq !== 'undefined') fbq('track', 'AddToCart', { value: price, currency: 'ILS' });
@@ -1110,9 +1111,10 @@
     });
     const name = qty === 1 ? 'חגורת עדי האוטומטית' : `חגורת עדי × ${qty}`;
     const colorStr = colors.join(' + ');
+    const imgUrl = colorImages[colors[0]] || document.getElementById('main-img')?.src || '';
     const existing = cartItems.find(i => i.name === name && i.colorStr === colorStr);
     if (existing) existing.qty += 1;
-    else cartItems.push({ name, colorStr, price: bundleInfo.price, qty: 1 });
+    else cartItems.push({ name, colorStr, price: bundleInfo.price, qty: 1, imgUrl });
     updateCartUI();
     openCart();
     if (typeof fbq !== 'undefined') fbq('track', 'AddToCart', { value: bundleInfo.price, currency: 'ILS' });
@@ -1164,7 +1166,7 @@
 
     list.innerHTML = cartItems.map((item, i) => `
       <div class="flex gap-3 bg-white border border-border rounded-2xl p-3">
-        <img src="https://placehold.co/72x72/F2DDD1/C4957A?text=Z" class="w-16 h-16 rounded-xl object-cover flex-shrink-0" alt="${item.name}">
+        <img src="${item.imgUrl || 'https://placehold.co/72x72/F2DDD1/C4957A?text=Z'}" class="w-16 h-16 rounded-xl object-cover flex-shrink-0" alt="${item.name}">
         <div class="flex-1 min-w-0">
           <p class="font-semibold text-sm leading-tight mb-0.5">${item.name}</p>
           <p class="text-xs text-ink-m mb-2">צבע: ${item.colorStr || item.color || ''}</p>
