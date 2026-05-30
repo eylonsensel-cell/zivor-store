@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZIVOR — פאנל ניהול</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.3/Sortable.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
 tailwind.config = {
@@ -36,6 +37,10 @@ tailwind.config = {
 .upload-zone { border:2px dashed #E8D5C8; border-radius:12px; padding:20px; text-align:center; cursor:pointer; transition:border-color .2s; }
 .upload-zone:hover, .upload-zone.drag { border-color:#C4957A; background:#FAF6F2; }
 .upload-zone input { display:none; }
+.img-thumb[data-sortable] { cursor:grab; }
+.img-thumb[data-sortable]:active { cursor:grabbing; }
+.sortable-ghost { opacity:.35; border:2px dashed #C4957A !important; border-radius:8px; }
+.sortable-drag { opacity:.95; box-shadow:0 12px 32px -6px rgba(0,0,0,.25); transform:scale(1.04); }
 </style>
 </head>
 <body class="bg-bg text-ink min-h-screen">
@@ -877,6 +882,8 @@ function handleDrop(e) {
 const COLOR_OPTIONS = ['זהב', 'כסף'];
 const COLOR_STYLES = { 'זהב': 'background:#D4AF37;color:#fff', 'כסף': 'background:#C0C0C0;color:#333' };
 
+let _productSortable = null;
+
 function renderImagePreviews() {
   const container = document.getElementById('images-preview');
   container.innerHTML = productImages.map((url, i) => {
@@ -886,8 +893,9 @@ function renderImagePreviews() {
       return `<button onclick="setImageColor(${i},'${c}')" title="סמן כ${c}" style="font-size:9px;padding:1px 5px;border-radius:4px;font-weight:700;cursor:pointer;border:1.5px solid transparent;${active ? COLOR_STYLES[c]+';border-color:#C4957A' : 'background:#f0ebe6;color:#6B5B53'}">${c}</button>`;
     }).join('');
     return `
-    <div class="img-thumb" style="position:relative;">
-      <img src="${url}" alt="">
+    <div class="img-thumb" data-sortable data-idx="${i}" style="position:relative;">
+      <div style="position:absolute;top:3px;right:3px;z-index:2;background:rgba(0,0,0,.45);color:#fff;border-radius:4px;font-size:10px;padding:1px 4px;pointer-events:none;">⠿</div>
+      <img src="${url}" alt="" style="pointer-events:none;">
       <div class="remove-btn" onclick="removeImage(${i})">×</div>
       <div style="position:absolute;bottom:4px;right:0;left:0;display:flex;gap:3px;justify-content:center;padding:0 2px;">
         ${colorBtns}
@@ -898,6 +906,30 @@ function renderImagePreviews() {
   const remaining = Math.max(0, 4 - productImages.length);
   for (let i = 0; i < remaining && productImages.length > 0; i++) {
     container.innerHTML += `<div class="img-thumb flex items-center justify-center text-ink-m text-2xl border-2 border-dashed border-border cursor-pointer" onclick="document.querySelector('#upload-zone input').click()">+</div>`;
+  }
+
+  // Init drag-and-drop
+  if (_productSortable) { _productSortable.destroy(); _productSortable = null; }
+  if (productImages.length > 1) {
+    _productSortable = Sortable.create(container, {
+      animation: 180,
+      ghostClass: 'sortable-ghost',
+      dragClass: 'sortable-drag',
+      filter: '.border-dashed',
+      onEnd() {
+        const newImages = [];
+        const newColorMap = {};
+        container.querySelectorAll('.img-thumb[data-idx]').forEach(el => {
+          const oldIdx = parseInt(el.dataset.idx);
+          const newIdx = newImages.length;
+          newImages.push(productImages[oldIdx]);
+          if (productColorMap[oldIdx] !== undefined) newColorMap[newIdx] = productColorMap[oldIdx];
+        });
+        productImages = newImages;
+        productColorMap = newColorMap;
+        renderImagePreviews();
+      }
+    });
   }
 }
 
@@ -1166,16 +1198,57 @@ async function loadContentTab() {
   } catch(e) { console.error(e); }
 }
 
+let _lifestyleSortable = null;
+
 function renderLifestylePreview() {
   const grid = document.getElementById('lifestyle-grid-preview');
   const filled = lifestyleImages.filter(x => x.url);
-  grid.innerHTML = filled.map((item, i) => `
-    <div class="img-thumb relative" style="aspect-ratio:1;">
-      <img src="${item.url}" alt="" style="width:100%;height:100%;object-fit:cover;">
-      <div class="remove-btn" onclick="removeLifestyleImg(${lifestyleImages.indexOf(item)})">×</div>
-    </div>`).join('');
+  grid.innerHTML = filled.map((item) => {
+    const idx = lifestyleImages.indexOf(item);
+    return `
+    <div class="img-thumb" data-sortable data-ls-idx="${idx}" style="aspect-ratio:1;position:relative;">
+      <div style="position:absolute;top:3px;right:3px;z-index:2;background:rgba(0,0,0,.45);color:#fff;border-radius:4px;font-size:10px;padding:1px 4px;pointer-events:none;">⠿</div>
+      <img src="${item.url}" alt="" style="width:100%;height:100%;object-fit:cover;pointer-events:none;">
+      <div class="remove-btn" onclick="removeLifestyleImg(${idx})">×</div>
+    </div>`;
+  }).join('');
   if (filled.length < 6) {
     grid.innerHTML += `<div class="img-thumb flex items-center justify-center text-ink-m text-2xl border-2 border-dashed border-border cursor-pointer" style="aspect-ratio:1;" onclick="document.querySelector('#tab-content .upload-zone:last-of-type input').click()">+</div>`;
+  }
+
+  // Init drag-and-drop
+  if (_lifestyleSortable) { _lifestyleSortable.destroy(); _lifestyleSortable = null; }
+  if (filled.length > 1) {
+    _lifestyleSortable = Sortable.create(grid, {
+      animation: 180,
+      ghostClass: 'sortable-ghost',
+      dragClass: 'sortable-drag',
+      filter: '.border-dashed',
+      async onEnd() {
+        // Rebuild order from DOM
+        const newOrder = [];
+        grid.querySelectorAll('.img-thumb[data-ls-idx]').forEach(el => {
+          const idx = parseInt(el.dataset.lsIdx);
+          newOrder.push(lifestyleImages[idx]);
+        });
+        // Fill remaining empty slots
+        const emptySlots = lifestyleImages.filter(x => !x.url);
+        const reordered = [...newOrder, ...emptySlots];
+        // Reassign keys in order
+        reordered.forEach((item, i) => { item.key = `lifestyle_image_${i + 1}`; });
+        lifestyleImages = reordered;
+        renderLifestylePreview();
+        // Save new order to Supabase
+        try {
+          await Promise.all(lifestyleImages.map(item =>
+            sbFetch(`site_content?key=eq.${item.key}`, {
+              method: 'PATCH',
+              body: JSON.stringify({ value: item.url, updated_at: new Date().toISOString() })
+            })
+          ));
+        } catch(e) { console.error('שגיאה בשמירת סדר:', e); }
+      }
+    });
   }
 }
 
