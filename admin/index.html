@@ -90,6 +90,8 @@ tailwind.config = {
             class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors">📊 סטטיסטיקות</button>
           <button onclick="showTab('content')" data-tab="content"
             class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors">🎬 עמוד הבית</button>
+          <button onclick="showTab('reviews')" data-tab="reviews"
+            class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors">⭐ ביקורות</button>
         </div>
       </div>
       <button onclick="doLogout()" class="text-ink-m hover:text-ink text-sm">התנתק</button>
@@ -278,6 +280,70 @@ tailwind.config = {
       </label>
     </div>
 
+  </div>
+
+  <!-- REVIEWS TAB -->
+  <div id="tab-reviews" class="max-w-4xl mx-auto px-4 py-8 hidden">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-xl font-bold">ביקורות</h2>
+        <p class="text-ink-m text-sm mt-0.5">ביקורות ממתינות לאישור מופיעות כאן לפני שעולות לאתר</p>
+      </div>
+      <button onclick="openReviewForm()" class="bg-ink text-white rounded-xl px-5 py-2.5 text-sm font-medium hover:bg-accent transition-colors">+ הוסף ביקורת</button>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="flex gap-1 bg-surface rounded-xl p-1 mb-6 w-fit">
+      <button onclick="filterReviews('pending')" id="rv-filter-pending" class="rv-filter px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors bg-white text-ink shadow-sm">ממתינות <span id="rv-count-pending" class="text-accent"></span></button>
+      <button onclick="filterReviews('approved')" id="rv-filter-approved" class="rv-filter px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors text-ink-m">מאושרות</button>
+      <button onclick="filterReviews('rejected')" id="rv-filter-rejected" class="rv-filter px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors text-ink-m">נדחות</button>
+    </div>
+
+    <div id="reviews-list" class="space-y-3">
+      <div class="text-center py-12 text-ink-m">טוען...</div>
+    </div>
+  </div>
+
+  <!-- REVIEW FORM MODAL -->
+  <div id="review-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50" onclick="closeReviewForm()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl p-6">
+      <div class="flex items-center justify-between mb-5">
+        <h3 class="font-bold text-base">הוספת ביקורת</h3>
+        <button onclick="closeReviewForm()" class="text-ink-m hover:text-ink text-2xl leading-none">&times;</button>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-1.5">שם הלקוחה</label>
+          <input id="rv-name" type="text" placeholder='למשל: שירה ל.'
+            class="w-full border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1.5">דירוג</label>
+          <div class="flex gap-2" id="rv-stars">
+            <button type="button" onclick="setRating(5)" class="rv-star text-2xl text-accent" data-val="5">★</button>
+            <button type="button" onclick="setRating(4)" class="rv-star text-2xl text-border" data-val="4">★</button>
+            <button type="button" onclick="setRating(3)" class="rv-star text-2xl text-border" data-val="3">★</button>
+            <button type="button" onclick="setRating(2)" class="rv-star text-2xl text-border" data-val="2">★</button>
+            <button type="button" onclick="setRating(1)" class="rv-star text-2xl text-border" data-val="1">★</button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1.5">טקסט הביקורת</label>
+          <textarea id="rv-text" rows="4" placeholder="הביקורת של הלקוחה..."
+            class="w-full border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent resize-none"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1.5">סטטוס</label>
+          <select id="rv-status" class="w-full border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent">
+            <option value="approved">מאושר מיד</option>
+            <option value="pending">ממתין לאישור</option>
+          </select>
+        </div>
+        <p id="rv-err" class="text-red-500 text-sm hidden"></p>
+        <button onclick="saveReview()" class="w-full bg-ink text-white rounded-xl py-3 font-semibold hover:bg-accent transition-colors text-sm">שמור ביקורת</button>
+      </div>
+    </div>
   </div>
 
   <!-- ANALYTICS TAB -->
@@ -568,7 +634,7 @@ initAuth();
 
 // ===== TABS =====
 function showTab(tab) {
-  ['orders','products','analytics','content'].forEach(t => {
+  ['orders','products','analytics','content','reviews'].forEach(t => {
     document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== tab);
     const btn = document.querySelector(`[data-tab="${t}"]`);
     if (!btn) return;
@@ -580,6 +646,7 @@ function showTab(tab) {
   if (tab === 'products')  loadProducts();
   if (tab === 'analytics') loadAnalytics();
   if (tab === 'content')   loadContentTab();
+  if (tab === 'reviews')   loadReviews();
 }
 
 // ===== SUPABASE =====
@@ -1167,6 +1234,117 @@ function setChartRange(days) {
     btn.classList.toggle('text-ink-m', d !== days);
   });
   loadRevenueChart(days);
+}
+
+// ===== REVIEWS TAB =====
+let currentReviewFilter = 'pending';
+let reviewRating = 5;
+
+function showTab(tab) {
+  // override defined below — this stub is replaced by the real one
+}
+
+async function loadReviews() {
+  const list = document.getElementById('reviews-list');
+  list.innerHTML = '<div class="text-center py-12 text-ink-m">טוען...</div>';
+  try {
+    const all = await sbFetch(`reviews?order=created_at.desc`);
+    const pending  = (all||[]).filter(r => r.status === 'pending');
+    const countEl = document.getElementById('rv-count-pending');
+    if (countEl) countEl.textContent = pending.length ? `(${pending.length})` : '';
+    const filtered = (all||[]).filter(r => r.status === currentReviewFilter);
+    if (!filtered.length) {
+      list.innerHTML = '<div class="text-center py-12 text-ink-m">אין ביקורות בקטגוריה זו</div>';
+      return;
+    }
+    list.innerHTML = filtered.map(r => `
+      <div class="bg-white border border-border rounded-2xl p-5 flex gap-4 items-start">
+        <div class="w-10 h-10 rounded-full bg-surface flex items-center justify-center font-bold text-accent flex-shrink-0">
+          ${r.name.charAt(0)}
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="font-semibold text-sm">${r.name}</span>
+            <span class="text-accent text-xs">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+          </div>
+          <p class="text-ink-s text-sm" style="line-height:1.7;">${r.text}</p>
+          <p class="text-xs text-ink-m mt-2">${new Date(r.created_at).toLocaleDateString('he-IL')}</p>
+        </div>
+        <div class="flex flex-col gap-2 flex-shrink-0">
+          ${r.status === 'pending' ? `
+            <button onclick="setReviewStatus('${r.id}','approved')" class="text-xs bg-green-100 text-green-700 font-semibold px-3 py-1.5 rounded-lg hover:bg-green-200 transition-colors">אשר</button>
+            <button onclick="setReviewStatus('${r.id}','rejected')" class="text-xs bg-red-50 text-red-500 font-semibold px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors">דחה</button>
+          ` : r.status === 'approved' ? `
+            <button onclick="setReviewStatus('${r.id}','rejected')" class="text-xs bg-red-50 text-red-500 font-semibold px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors">הסר</button>
+          ` : `
+            <button onclick="setReviewStatus('${r.id}','approved')" class="text-xs bg-green-100 text-green-700 font-semibold px-3 py-1.5 rounded-lg hover:bg-green-200 transition-colors">אשר</button>
+          `}
+          <button onclick="deleteReview('${r.id}')" class="text-xs text-ink-m hover:text-red-500 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50">מחק</button>
+        </div>
+      </div>`).join('');
+  } catch(e) { list.innerHTML = `<div class="text-red-400 text-sm">${e.message}</div>`; }
+}
+
+function filterReviews(status) {
+  currentReviewFilter = status;
+  document.querySelectorAll('.rv-filter').forEach(b => {
+    const active = b.id === `rv-filter-${status}`;
+    b.classList.toggle('bg-white', active);
+    b.classList.toggle('text-ink', active);
+    b.classList.toggle('shadow-sm', active);
+    b.classList.toggle('text-ink-m', !active);
+  });
+  loadReviews();
+}
+
+async function setReviewStatus(id, status) {
+  try {
+    await sbFetch(`reviews?id=eq.${id}`, { method:'PATCH', body: JSON.stringify({ status }) });
+    loadReviews();
+  } catch(e) { alert('שגיאה: '+e.message); }
+}
+
+async function deleteReview(id) {
+  if (!confirm('למחוק ביקורת זו לצמיתות?')) return;
+  try {
+    await sbFetch(`reviews?id=eq.${id}`, { method:'DELETE' });
+    loadReviews();
+  } catch(e) { alert('שגיאה: '+e.message); }
+}
+
+function openReviewForm() {
+  reviewRating = 5;
+  document.getElementById('rv-name').value = '';
+  document.getElementById('rv-text').value = '';
+  document.getElementById('rv-status').value = 'approved';
+  document.getElementById('rv-err').classList.add('hidden');
+  setRating(5);
+  document.getElementById('review-modal').classList.remove('hidden');
+}
+
+function closeReviewForm() {
+  document.getElementById('review-modal').classList.add('hidden');
+}
+
+function setRating(val) {
+  reviewRating = val;
+  document.querySelectorAll('.rv-star').forEach(s => {
+    s.style.color = parseInt(s.dataset.val) <= val ? '#C4957A' : '#E8D5C8';
+  });
+}
+
+async function saveReview() {
+  const name   = document.getElementById('rv-name').value.trim();
+  const text   = document.getElementById('rv-text').value.trim();
+  const status = document.getElementById('rv-status').value;
+  const errEl  = document.getElementById('rv-err');
+  if (!name || !text) { errEl.textContent = 'נא למלא שם וטקסט'; errEl.classList.remove('hidden'); return; }
+  errEl.classList.add('hidden');
+  try {
+    await sbFetch('reviews', { method:'POST', body: JSON.stringify({ name, text, rating: reviewRating, status }) });
+    closeReviewForm();
+    loadReviews();
+  } catch(e) { errEl.textContent = 'שגיאה: '+e.message; errEl.classList.remove('hidden'); }
 }
 
 // ===== CONTENT TAB =====

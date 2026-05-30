@@ -687,10 +687,11 @@
   </div>
 
   <!-- Cards -->
-  <div class="grid md:grid-cols-3 gap-5">
+  <div id="reviews-grid" class="grid md:grid-cols-3 gap-5">
+    <!-- ביקורות נטענות דינמית מ-Supabase, fallback סטטי: -->
     <div class="reveal bg-white border border-border rounded-2xl p-5 shadow-[0_2px_16px_-6px_rgba(196,149,122,.2)]">
       <div class="flex items-center gap-3 mb-3">
-        <img src="https://placehold.co/44x44/F2DDD1/C4957A?text=ש" class="w-11 h-11 rounded-full" loading="lazy" alt="שירה">
+        <div class="w-11 h-11 rounded-full bg-surface flex items-center justify-center font-bold text-accent">ש</div>
         <div><p class="font-semibold text-sm">שירה ל.</p><span class="star text-xs">★★★★★</span></div>
       </div>
       <p class="text-ink-s text-sm" style="line-height:1.75;">״היו לי 4 חגורות בארון. מאז שה-ZIVOR הגיעה לא נגעתי באף אחת מהן. פשוט עובדת, בלי שזה עסק.״</p>
@@ -698,7 +699,7 @@
     </div>
     <div class="reveal bg-white border border-border rounded-2xl p-5 shadow-[0_2px_16px_-6px_rgba(196,149,122,.2)]" style="transition-delay:.1s">
       <div class="flex items-center gap-3 mb-3">
-        <img src="https://placehold.co/44x44/EDD9CA/6B5B53?text=מ" class="w-11 h-11 rounded-full" loading="lazy" alt="מיכל">
+        <div class="w-11 h-11 rounded-full bg-surface flex items-center justify-center font-bold text-accent">מ</div>
         <div><p class="font-semibold text-sm">מיכל כ.</p><span class="star text-xs">★★★★★</span></div>
       </div>
       <p class="text-ink-s text-sm" style="line-height:1.75;">״אחרי ארוחת צהריים בעבודה לחצתי על הבאקל, שחררתי קצת, ואף אחד שם לב. שם הבנתי שזה שונה.״</p>
@@ -706,7 +707,7 @@
     </div>
     <div class="reveal bg-white border border-border rounded-2xl p-5 shadow-[0_2px_16px_-6px_rgba(196,149,122,.2)]" style="transition-delay:.2s">
       <div class="flex items-center gap-3 mb-3">
-        <img src="https://placehold.co/44x44/E8C5B0/A87860?text=נ" class="w-11 h-11 rounded-full" loading="lazy" alt="נועה">
+        <div class="w-11 h-11 rounded-full bg-surface flex items-center justify-center font-bold text-accent">נ</div>
         <div><p class="font-semibold text-sm">נועה א.</p><span class="star text-xs">★★★★★</span></div>
       </div>
       <p class="text-ink-s text-sm" style="line-height:1.75;">״ממש לא האמנתי שזה ישנה. אבל זו חגורה שעובדת לפי הגוף שלך. לא הפוך. זה הכל.״</p>
@@ -1458,6 +1459,36 @@
     } catch(e) {}
   }
   loadSiteContent();
+
+  /* ── Load approved reviews ── */
+  async function loadReviewsFromDB() {
+    try {
+      const res = await fetch(
+        `${SB_URL}/rest/v1/reviews?status=eq.approved&order=created_at.desc&limit=6&select=name,text,rating`,
+        { headers: { 'apikey': SB_ANON, 'Authorization': `Bearer ${SB_ANON}` } }
+      );
+      const reviews = await res.json();
+      if (!reviews?.length) return;
+      const grid = document.getElementById('reviews-grid');
+      const colors = ['#F2DDD1','#EDD9CA','#E8C5B0','#F2DDD1','#EDD9CA','#E8C5B0'];
+      grid.innerHTML = reviews.map((r, i) => `
+        <div class="reveal bg-white border border-border rounded-2xl p-5 shadow-[0_2px_16px_-6px_rgba(196,149,122,.2)]" style="transition-delay:${i*0.1}s">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-accent flex-shrink-0" style="background:${colors[i%colors.length]}">
+              ${r.name.charAt(0)}
+            </div>
+            <div>
+              <p class="font-semibold text-sm">${r.name}</p>
+              <span class="star text-xs">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+            </div>
+          </div>
+          <p class="text-ink-s text-sm" style="line-height:1.75;">״${r.text}״</p>
+          <p class="text-xs text-ink-m mt-3">✓ קנייה מאומתת</p>
+        </div>`).join('');
+      observeReveal();
+    } catch(e) { /* שומר על הביקורות הסטטיות במקרה של שגיאה */ }
+  }
+  loadReviewsFromDB();
 
   /* ── Page view tracking ── */
   (function(){
