@@ -83,6 +83,8 @@ tailwind.config = {
             class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors">מוצרים</button>
           <button onclick="showTab('analytics')" data-tab="analytics"
             class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors">📊 סטטיסטיקות</button>
+          <button onclick="showTab('content')" data-tab="content"
+            class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors">🎬 עמוד הבית</button>
         </div>
       </div>
       <button onclick="doLogout()" class="text-ink-m hover:text-ink text-sm">התנתק</button>
@@ -156,6 +158,72 @@ tailwind.config = {
     </div>
     <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       <div class="text-center py-12 text-ink-m">טוען מוצרים...</div>
+    </div>
+  </div>
+
+  <!-- CONTENT TAB -->
+  <div id="tab-content" class="max-w-3xl mx-auto px-4 py-8 hidden">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h2 class="text-xl font-bold">עמוד הבית</h2>
+        <p class="text-ink-m text-sm mt-0.5">ניהול סרטונים וסקשנים באתר</p>
+      </div>
+    </div>
+
+    <!-- Video section card -->
+    <div class="bg-white rounded-2xl border border-border p-6 mb-5">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-10 h-10 rounded-xl bg-ink flex items-center justify-center text-white text-lg">🎬</div>
+        <div>
+          <h3 class="font-bold text-sm">סרטון מוצר</h3>
+          <p class="text-xs text-ink-m">מוצג מתחת לסקשן המוצר הראשי</p>
+        </div>
+      </div>
+
+      <!-- Video URL input -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-1.5">קישור לסרטון</label>
+        <input id="content-video-url" type="url" placeholder="https://www.youtube.com/watch?v=... או קישור ישיר לקובץ"
+          class="w-full border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent transition-colors" dir="ltr">
+        <p class="text-xs text-ink-m mt-1.5">תומך ב-YouTube, Vimeo, או קישור ישיר לקובץ וידאו</p>
+      </div>
+
+      <!-- OR upload video file -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-1.5">או העלה קובץ וידאו</label>
+        <label id="video-upload-zone" class="upload-zone block cursor-pointer"
+          ondragover="event.preventDefault();this.classList.add('drag')"
+          ondragleave="this.classList.remove('drag')"
+          ondrop="handleVideoDrop(event)">
+          <input type="file" accept="video/*" style="display:none" onchange="handleVideoUpload(this.files[0])">
+          <div id="video-upload-status" class="flex flex-col items-center gap-2 pointer-events-none">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+            </svg>
+            <span class="text-sm text-ink-m">גרור קובץ וידאו לכאן או <span class="text-accent font-medium">לחץ לבחירה</span></span>
+            <span class="text-xs text-ink-m">MP4, MOV, WebM — עד 50MB</span>
+          </div>
+        </label>
+      </div>
+
+      <!-- Title input -->
+      <div class="mb-5">
+        <label class="block text-sm font-medium mb-1.5">כותרת הסקשן</label>
+        <input id="content-video-title" type="text" placeholder="ראי את זה בפעולה"
+          class="w-full border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent transition-colors">
+      </div>
+
+      <!-- Preview -->
+      <div id="video-preview-wrap" class="hidden mb-5">
+        <p class="text-xs font-semibold text-ink-m mb-2 uppercase tracking-widest">תצוגה מקדימה</p>
+        <div id="video-preview" class="rounded-xl overflow-hidden aspect-video bg-ink"></div>
+      </div>
+
+      <button onclick="saveVideoContent()" id="save-content-btn"
+        class="w-full bg-ink text-white rounded-xl py-3 font-semibold hover:bg-accent transition-colors text-sm">
+        שמור שינויים
+      </button>
+      <p id="content-save-msg" class="text-sm text-center mt-2 hidden"></p>
     </div>
   </div>
 
@@ -447,7 +515,7 @@ initAuth();
 
 // ===== TABS =====
 function showTab(tab) {
-  ['orders','products','analytics'].forEach(t => {
+  ['orders','products','analytics','content'].forEach(t => {
     document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== tab);
     const btn = document.querySelector(`[data-tab="${t}"]`);
     if (!btn) return;
@@ -458,6 +526,7 @@ function showTab(tab) {
   if (tab === 'orders')    loadOrders();
   if (tab === 'products')  loadProducts();
   if (tab === 'analytics') loadAnalytics();
+  if (tab === 'content')   loadContentTab();
 }
 
 // ===== SUPABASE =====
@@ -1018,6 +1087,101 @@ function setChartRange(days) {
     btn.classList.toggle('text-ink-m', d !== days);
   });
   loadRevenueChart(days);
+}
+
+// ===== CONTENT TAB =====
+async function loadContentTab() {
+  try {
+    const rows = await sbFetch('site_content?key=in.(video_section_url,video_section_title)&select=key,value');
+    const data = Object.fromEntries((rows || []).map(r => [r.key, r.value]));
+    const url   = data['video_section_url']   || '';
+    const title = data['video_section_title'] || 'ראי את זה בפעולה';
+    document.getElementById('content-video-url').value   = url;
+    document.getElementById('content-video-title').value = title;
+    if (url) updateVideoPreview(url);
+  } catch(e) { console.error(e); }
+}
+
+function updateVideoPreview(url) {
+  const wrap    = document.getElementById('video-preview-wrap');
+  const preview = document.getElementById('video-preview');
+  if (!url) { wrap.classList.add('hidden'); return; }
+
+  const ytMatch    = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  let html = '';
+  if (ytMatch) {
+    html = `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}?rel=0&modestbranding=1" class="w-full h-full" frameborder="0" allowfullscreen></iframe>`;
+  } else if (vimeoMatch) {
+    html = `<iframe src="https://player.vimeo.com/video/${vimeoMatch[1]}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>`;
+  } else {
+    html = `<video src="${url}" class="w-full h-full object-cover" controls></video>`;
+  }
+  preview.innerHTML = html;
+  wrap.classList.remove('hidden');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const urlInput = document.getElementById('content-video-url');
+  if (urlInput) {
+    urlInput.addEventListener('input', () => updateVideoPreview(urlInput.value.trim()));
+  }
+});
+
+async function handleVideoUpload(file) {
+  if (!file) return;
+  if (file.size > 50 * 1024 * 1024) { alert('הקובץ גדול מ-50MB'); return; }
+  const zone = document.getElementById('video-upload-zone');
+  const status = document.getElementById('video-upload-status');
+  status.innerHTML = '<span class="text-sm text-accent">מעלה...</span>';
+  zone.style.pointerEvents = 'none';
+  try {
+    const ext = file.name.split('.').pop().toLowerCase();
+    const filename = `videos/${Date.now()}.${ext}`;
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/product-images/${filename}`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session}`, 'Content-Type': file.type },
+      body: file,
+    });
+    if (!res.ok) throw new Error(await res.text());
+    const publicUrl = `${STORAGE_BASE}/${filename}`;
+    document.getElementById('content-video-url').value = publicUrl;
+    updateVideoPreview(publicUrl);
+  } catch(e) { alert('שגיאה בהעלאה: ' + e.message); }
+  finally {
+    status.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg><span class="text-sm text-ink-m">גרור קובץ וידאו לכאן או <span class="text-accent font-medium">לחץ לבחירה</span></span><span class="text-xs text-ink-m">MP4, MOV, WebM — עד 50MB</span>';
+    zone.style.pointerEvents = '';
+  }
+}
+
+function handleVideoDrop(e) {
+  e.preventDefault();
+  document.getElementById('video-upload-zone').classList.remove('drag');
+  handleVideoUpload(e.dataTransfer.files[0]);
+}
+
+async function saveVideoContent() {
+  const btn  = document.getElementById('save-content-btn');
+  const msg  = document.getElementById('content-save-msg');
+  const url  = document.getElementById('content-video-url').value.trim();
+  const title = document.getElementById('content-video-title').value.trim();
+  btn.textContent = 'שומר...'; btn.disabled = true; msg.classList.add('hidden');
+  try {
+    await Promise.all([
+      sbFetch('site_content?key=eq.video_section_url', { method:'PATCH', body: JSON.stringify({ value: url, updated_at: new Date().toISOString() }) }),
+      sbFetch('site_content?key=eq.video_section_title', { method:'PATCH', body: JSON.stringify({ value: title, updated_at: new Date().toISOString() }) }),
+    ]);
+    msg.textContent = 'נשמר בהצלחה ✓';
+    msg.className = 'text-sm text-center mt-2 text-green-600';
+    msg.classList.remove('hidden');
+    setTimeout(() => msg.classList.add('hidden'), 3000);
+  } catch(e) {
+    msg.textContent = 'שגיאה: ' + e.message;
+    msg.className = 'text-sm text-center mt-2 text-red-500';
+    msg.classList.remove('hidden');
+  } finally {
+    btn.textContent = 'שמור שינויים'; btn.disabled = false;
+  }
 }
 </script>
 </body>

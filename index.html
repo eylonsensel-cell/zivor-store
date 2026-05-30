@@ -466,6 +466,14 @@
   </div><!-- end container -->
 </section>
 
+<!-- ░░░ VIDEO SECTION ░░░ -->
+<section id="video-section" class="py-16 bg-ink text-bg hidden">
+  <div class="max-w-3xl mx-auto px-5 text-center">
+    <h2 id="video-section-title" class="font-display font-black text-2xl md:text-3xl mb-8" style="letter-spacing:-.02em;">ראי את זה בפעולה</h2>
+    <div id="video-container" class="relative rounded-[1.5rem] overflow-hidden shadow-[0_24px_64px_-12px_rgba(0,0,0,.6)] aspect-video bg-surface/10"></div>
+  </div>
+</section>
+
 <!-- ░░░ TRUST BAR ░░░ -->
 <section class="bg-surface border-y border-border py-7">
   <div class="max-w-5xl mx-auto px-5 grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -1319,6 +1327,43 @@
   }
 
   loadProduct();
+
+  /* ── Load video section ── */
+  async function loadVideoSection() {
+    try {
+      const res = await fetch(
+        `${SB_URL}/rest/v1/site_content?key=in.(video_section_url,video_section_title)&select=key,value`,
+        { headers: { 'apikey': SB_ANON, 'Authorization': `Bearer ${SB_ANON}` } }
+      );
+      const rows = await res.json();
+      const data = Object.fromEntries((rows || []).map(r => [r.key, r.value]));
+
+      const url = data['video_section_url'] || '';
+      if (!url) return;
+
+      const section = document.getElementById('video-section');
+      const container = document.getElementById('video-container');
+      const titleEl = document.getElementById('video-section-title');
+
+      if (data['video_section_title']) titleEl.textContent = data['video_section_title'];
+
+      // Detect YouTube / Vimeo or direct video
+      let embedHtml = '';
+      const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
+      const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+      if (ytMatch) {
+        embedHtml = `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}?rel=0&modestbranding=1" class="absolute inset-0 w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      } else if (vimeoMatch) {
+        embedHtml = `<iframe src="https://player.vimeo.com/video/${vimeoMatch[1]}?title=0&byline=0&portrait=0" class="absolute inset-0 w-full h-full" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+      } else {
+        embedHtml = `<video src="${url}" class="absolute inset-0 w-full h-full object-cover" controls playsinline></video>`;
+      }
+
+      container.innerHTML = embedHtml;
+      section.classList.remove('hidden');
+    } catch(e) {}
+  }
+  loadVideoSection();
 
   /* ── Page view tracking ── */
   (function(){
