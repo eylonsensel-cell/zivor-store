@@ -166,7 +166,7 @@ tailwind.config = {
     <div class="flex items-center justify-between mb-8">
       <div>
         <h2 class="text-xl font-bold">עמוד הבית</h2>
-        <p class="text-ink-m text-sm mt-0.5">ניהול סרטונים וסקשנים באתר</p>
+        <p class="text-ink-m text-sm mt-0.5">ניהול תמונות, סרטונים וסקשנים באתר</p>
       </div>
     </div>
 
@@ -225,6 +225,54 @@ tailwind.config = {
       </button>
       <p id="content-save-msg" class="text-sm text-center mt-2 hidden"></p>
     </div>
+
+    <!-- Benefits center image card -->
+    <div class="bg-white rounded-2xl border border-border p-6 mb-5">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-10 h-10 rounded-xl bg-surface flex items-center justify-center text-lg">🖼️</div>
+        <div>
+          <h3 class="font-bold text-sm">תמונת יתרונות (מרכז)</h3>
+          <p class="text-xs text-ink-m">מוצגת בסקשן "הרגעים שבהם תביני שעשית נכון"</p>
+        </div>
+      </div>
+      <div id="benefits-img-preview" class="hidden mb-4 rounded-xl overflow-hidden aspect-[4/5] max-w-[160px]">
+        <img id="benefits-img-preview-el" src="" alt="" class="w-full h-full object-cover">
+      </div>
+      <label class="upload-zone block cursor-pointer"
+        ondragover="event.preventDefault();this.classList.add('drag')"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="handleSectionImgDrop(event,'benefits_center_image')">
+        <input type="file" accept="image/*" style="display:none" onchange="handleSectionImgUpload(this.files[0],'benefits_center_image','benefits-img-preview','benefits-img-preview-el')">
+        <div class="flex flex-col items-center gap-1.5 pointer-events-none">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+          <span class="text-sm text-ink-m">גרור תמונה לכאן או <span class="text-accent font-medium">לחץ לבחירה</span></span>
+        </div>
+      </label>
+    </div>
+
+    <!-- Lifestyle gallery card -->
+    <div class="bg-white rounded-2xl border border-border p-6 mb-5">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-10 h-10 rounded-xl bg-surface flex items-center justify-center text-lg">📸</div>
+        <div>
+          <h3 class="font-bold text-sm">גלריית לייפסטייל</h3>
+          <p class="text-xs text-ink-m">עד 6 תמונות — מוצגות בגריד לפני סקשן הביקורות</p>
+        </div>
+      </div>
+      <div id="lifestyle-grid-preview" class="grid grid-cols-3 gap-2 mb-4"></div>
+      <label class="upload-zone block cursor-pointer"
+        ondragover="event.preventDefault();this.classList.add('drag')"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="handleLifestyleDrop(event)">
+        <input type="file" accept="image/*" multiple style="display:none" onchange="handleLifestyleUpload(this.files)">
+        <div class="flex flex-col items-center gap-1.5 pointer-events-none">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C4957A" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+          <span class="text-sm text-ink-m">גרור תמונות לכאן או <span class="text-accent font-medium">לחץ לבחירה</span></span>
+          <span class="text-xs text-ink-m">עד 6 תמונות, PNG/JPG/WebP</span>
+        </div>
+      </label>
+    </div>
+
   </div>
 
   <!-- ANALYTICS TAB -->
@@ -1090,16 +1138,96 @@ function setChartRange(days) {
 }
 
 // ===== CONTENT TAB =====
+let lifestyleImages = []; // [{key, url}, ...]
+
 async function loadContentTab() {
   try {
-    const rows = await sbFetch('site_content?key=in.(video_section_url,video_section_title)&select=key,value');
+    const rows = await sbFetch('site_content?select=key,value');
     const data = Object.fromEntries((rows || []).map(r => [r.key, r.value]));
+
+    /* Video */
     const url   = data['video_section_url']   || '';
     const title = data['video_section_title'] || 'ראי את זה בפעולה';
     document.getElementById('content-video-url').value   = url;
     document.getElementById('content-video-title').value = title;
     if (url) updateVideoPreview(url);
+
+    /* Benefits center image */
+    const benefitsUrl = data['benefits_center_image'] || '';
+    if (benefitsUrl) {
+      document.getElementById('benefits-img-preview-el').src = benefitsUrl;
+      document.getElementById('benefits-img-preview').classList.remove('hidden');
+    }
+
+    /* Lifestyle gallery */
+    lifestyleImages = [1,2,3,4,5,6]
+      .map(i => ({ key: `lifestyle_image_${i}`, url: data[`lifestyle_image_${i}`] || '' }));
+    renderLifestylePreview();
   } catch(e) { console.error(e); }
+}
+
+function renderLifestylePreview() {
+  const grid = document.getElementById('lifestyle-grid-preview');
+  const filled = lifestyleImages.filter(x => x.url);
+  grid.innerHTML = filled.map((item, i) => `
+    <div class="img-thumb relative" style="aspect-ratio:1;">
+      <img src="${item.url}" alt="" style="width:100%;height:100%;object-fit:cover;">
+      <div class="remove-btn" onclick="removeLifestyleImg(${lifestyleImages.indexOf(item)})">×</div>
+    </div>`).join('');
+  if (filled.length < 6) {
+    grid.innerHTML += `<div class="img-thumb flex items-center justify-center text-ink-m text-2xl border-2 border-dashed border-border cursor-pointer" style="aspect-ratio:1;" onclick="document.querySelector('#tab-content .upload-zone:last-of-type input').click()">+</div>`;
+  }
+}
+
+async function removeLifestyleImg(idx) {
+  if (!confirm('למחוק תמונה זו?')) return;
+  const item = lifestyleImages[idx];
+  try {
+    await sbFetch(`site_content?key=eq.${item.key}`, { method:'PATCH', body: JSON.stringify({ value: '', updated_at: new Date().toISOString() }) });
+    lifestyleImages[idx].url = '';
+    renderLifestylePreview();
+  } catch(e) { alert('שגיאה: ' + e.message); }
+}
+
+async function handleSectionImgUpload(file, contentKey, previewWrapId, previewImgId) {
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('הקובץ גדול מ-5MB'); return; }
+  try {
+    const url = await uploadImage(file);
+    if (!url) return;
+    await sbFetch(`site_content?key=eq.${contentKey}`, { method:'PATCH', body: JSON.stringify({ value: url, updated_at: new Date().toISOString() }) });
+    document.getElementById(previewImgId).src = url;
+    document.getElementById(previewWrapId).classList.remove('hidden');
+  } catch(e) { alert('שגיאה: ' + e.message); }
+}
+
+function handleSectionImgDrop(e, contentKey) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  handleSectionImgUpload(file, contentKey, 'benefits-img-preview', 'benefits-img-preview-el');
+}
+
+async function handleLifestyleUpload(files) {
+  const emptySlots = lifestyleImages.filter(x => !x.url);
+  const toUpload = Array.from(files).slice(0, emptySlots.length);
+  for (let i = 0; i < toUpload.length; i++) {
+    try {
+      const url = await uploadImage(toUpload[i]);
+      if (!url) continue;
+      const slot = emptySlots[i];
+      await sbFetch(`site_content?key=eq.${slot.key}`, { method:'PATCH', body: JSON.stringify({ value: url, updated_at: new Date().toISOString() }) });
+      slot.url = url;
+      renderLifestylePreview();
+    } catch(e) { alert('שגיאה: ' + e.message); }
+  }
+  if (toUpload.length === 0) alert('כל 6 הסלוטים מלאים. מחקי תמונה כדי להוסיף חדשה.');
+}
+
+function handleLifestyleDrop(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag');
+  handleLifestyleUpload(e.dataTransfer.files);
 }
 
 function updateVideoPreview(url) {
