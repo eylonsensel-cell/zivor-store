@@ -1408,7 +1408,10 @@
   const revObs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); } });
   }, { threshold: 0.08 });
-  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+  function observeReveal() {
+    document.querySelectorAll('.reveal:not(.in)').forEach(el => revObs.observe(el));
+  }
+  observeReveal();
 
   /* ── Mobile sticky CTA on scroll ── */
   window.addEventListener('scroll', () => {
