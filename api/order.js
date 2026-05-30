@@ -83,8 +83,11 @@ export default async function handler(req) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="x-apple-disable-message-reformatting">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap');</style>
 </head>
-<body style="margin:0;padding:0;background:#FAF6F2;font-family:'Helvetica Neue',Arial,sans-serif;direction:rtl;">
+<body style="margin:0;padding:0;background:#FAF6F2;font-family:'Heebo','Helvetica Neue',Arial,sans-serif;direction:rtl;">
 
   <!-- Preview text (hidden, shows in inbox preview) -->
   <span style="display:none;max-height:0;overflow:hidden;mso-hide:all;">
@@ -181,18 +184,6 @@ export default async function handler(req) {
           </tr>
         </table>
 
-        <!-- CTA: WhatsApp bulletproof button -->
-        <table cellpadding="0" cellspacing="0" style="margin:0 auto 36px;width:100%;">
-          <tr>
-            <td align="center" bgcolor="#25D366" style="border-radius:14px;">
-              <a href="https://wa.me/972000000000"
-                 target="_blank"
-                 style="font-size:15px;font-family:'Helvetica Neue',Arial,sans-serif;color:#ffffff;text-decoration:none;padding:16px 32px;display:inline-block;font-weight:700;">
-                💬 שאלות? כתבי לנו בוואטסאפ
-              </a>
-            </td>
-          </tr>
-        </table>
 
       </td>
     </tr>
