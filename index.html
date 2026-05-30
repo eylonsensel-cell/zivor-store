@@ -1067,11 +1067,19 @@
     gtag('event', 'add_to_cart', { currency: 'ILS', value: price, items: [{ item_name: name, quantity: 1, price }] });
   }
 
+  let colorImages = {};
+
   function selBeltColor(btn, bundleKey, beltNum) {
     document.querySelectorAll(`.swatch-${bundleKey}-${beltNum}`).forEach(s => s.classList.remove('on'));
     btn.classList.add('on');
     const lbl = document.getElementById(`color-lbl-${bundleKey}-${beltNum}`);
     if (lbl) lbl.textContent = btn.dataset.color;
+    const imgUrl = colorImages[btn.dataset.color];
+    if (imgUrl) {
+      const mainImg = document.getElementById('main-img');
+      mainImg.src = imgUrl;
+      document.querySelectorAll('.thumb').forEach(t => t.classList.remove('on'));
+    }
   }
 
   function addToCart() {
@@ -1287,13 +1295,16 @@
         { headers: { 'apikey': SB_ANON, 'Authorization': `Bearer ${SB_ANON}` } }
       );
       const [product] = await res.json();
-      if (!product || !product.images || product.images.length === 0) return;
+      if (!product) return;
+
+      if (product.color_images) colorImages = product.color_images;
 
       const imgs = product.images;
+      if (!imgs || imgs.length === 0) return;
 
-      /* update main image */
+      /* update main image — prefer black color image if tagged */
       const mainImg = document.getElementById('main-img');
-      mainImg.src = imgs[0];
+      mainImg.src = colorImages['שחור'] || imgs[0];
       mainImg.alt = product.name || 'חגורת עדי האוטומטית';
 
       /* rebuild thumbnails — parent of main-img's wrapper is the sticky gallery div */

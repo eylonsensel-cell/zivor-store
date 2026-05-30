@@ -366,6 +366,7 @@ const STORAGE_BASE = `${SUPABASE_URL}/storage/v1/object/public/product-images`;
 
 let session = null;
 let productImages = []; // array of public URLs for current editing product
+let productColorMap = {}; // index → color name (e.g. {0: 'שחור', 1: 'בז׳'})
 
 const STATUS_HE = {
   pending:'ממתין לתשלום', paid:'שולם', processing:'בטיפול',
@@ -756,18 +757,42 @@ function handleDrop(e) {
   handleImageUpload(e.dataTransfer.files);
 }
 
+const COLOR_OPTIONS = ['שחור', 'בז׳'];
+const COLOR_STYLES = { 'שחור': 'background:#1C1C1C;color:#fff', 'בז׳': 'background:#D4BFA5;color:#3d2e1e' };
+
 function renderImagePreviews() {
   const container = document.getElementById('images-preview');
-  container.innerHTML = productImages.map((url, i) => `
-    <div class="img-thumb">
+  container.innerHTML = productImages.map((url, i) => {
+    const assigned = productColorMap[i];
+    const colorBtns = COLOR_OPTIONS.map(c => {
+      const active = assigned === c;
+      return `<button onclick="setImageColor(${i},'${c}')" title="סמן כ${c}" style="font-size:9px;padding:1px 5px;border-radius:4px;font-weight:700;cursor:pointer;border:1.5px solid transparent;${active ? COLOR_STYLES[c]+';border-color:#C4957A' : 'background:#f0ebe6;color:#6B5B53'}">${c}</button>`;
+    }).join('');
+    return `
+    <div class="img-thumb" style="position:relative;">
       <img src="${url}" alt="">
       <div class="remove-btn" onclick="removeImage(${i})">×</div>
-    </div>`).join('');
+      <div style="position:absolute;bottom:4px;right:0;left:0;display:flex;gap:3px;justify-content:center;padding:0 2px;">
+        ${colorBtns}
+      </div>
+    </div>`;
+  }).join('');
   // Add placeholder slots
   const remaining = Math.max(0, 4 - productImages.length);
   for (let i = 0; i < remaining && productImages.length > 0; i++) {
     container.innerHTML += `<div class="img-thumb flex items-center justify-center text-ink-m text-2xl border-2 border-dashed border-border cursor-pointer" onclick="document.querySelector('#upload-zone input').click()">+</div>`;
   }
+}
+
+function setImageColor(idx, color) {
+  if (productColorMap[idx] === color) {
+    delete productColorMap[idx]; // toggle off
+  } else {
+    // remove this color from any other image first (one image per color)
+    Object.keys(productColorMap).forEach(k => { if (productColorMap[k] === color) delete productColorMap[k]; });
+    productColorMap[idx] = color;
+  }
+  renderImagePreviews();
 }
 
 function removeImage(idx) {
@@ -778,6 +803,7 @@ function removeImage(idx) {
 // ===== PRODUCT DRAWER =====
 async function openProductDrawer(id = null) {
   productImages = [];
+  productColorMap = {};
   renderImagePreviews();
   setUploadStatus('');
   document.getElementById('product-form').reset();
@@ -798,6 +824,13 @@ async function openProductDrawer(id = null) {
       document.getElementById('prod-stock').value = p.stock;
       document.getElementById('prod-active').checked = p.active;
       productImages = [...(p.images || [])];
+      productColorMap = {};
+      if (p.color_images) {
+        productImages.forEach((url, i) => {
+          const entry = Object.entries(p.color_images).find(([, u]) => u === url);
+          if (entry) productColorMap[i] = entry[0];
+        });
+      }
       renderImagePreviews();
     } catch(e) { alert('שגיאה בטעינה'); return; }
   }
@@ -824,6 +857,11 @@ async function saveProduct(e) {
   errEl.classList.add('hidden');
   btn.textContent = 'שומר...'; btn.disabled = true;
 
+  const colorImagesObj = {};
+  productImages.forEach((url, i) => {
+    if (productColorMap[i]) colorImagesObj[productColorMap[i]] = url;
+  });
+
   const data = {
     name: document.getElementById('prod-name').value.trim(),
     description: document.getElementById('prod-desc').value.trim(),
@@ -831,6 +869,7 @@ async function saveProduct(e) {
     compare_price: parseInt(document.getElementById('prod-compare').value) || null,
     stock: parseInt(document.getElementById('prod-stock').value) || 0,
     images: productImages,
+    color_images: colorImagesObj,
     active: document.getElementById('prod-active').checked,
   };
 
