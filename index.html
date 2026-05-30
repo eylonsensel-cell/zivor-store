@@ -714,7 +714,71 @@
       <p class="text-xs text-ink-m mt-3">✓ קנייה מאומתת</p>
     </div>
   </div>
+
+  <!-- Submit review CTA -->
+  <div class="text-center mt-10 reveal">
+    <p class="text-ink-m text-sm mb-3">קנית ZIVOR? נשמח לשמוע איך היה</p>
+    <button onclick="openWriteReview()"
+      class="btn-ring px-7 py-3 rounded-2xl font-semibold text-sm inline-flex items-center gap-2">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      כתבי ביקורת
+    </button>
+  </div>
 </section>
+
+<!-- ░░░ WRITE REVIEW MODAL ░░░ -->
+<div id="write-review-modal" class="fixed inset-0 z-50 hidden popup-bg" onclick="if(event.target===this)closeWriteReview()">
+  <div class="popup-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 mx-4">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="font-bold text-lg">כתבי ביקורת</h3>
+      <button onclick="closeWriteReview()" class="text-ink-m hover:text-ink text-2xl leading-none">&times;</button>
+    </div>
+
+    <div id="write-review-form" class="space-y-4">
+      <!-- Rating -->
+      <div>
+        <label class="block text-sm font-medium mb-2">הדירוג שלך</label>
+        <div class="flex gap-1" id="site-rv-stars">
+          <button type="button" onclick="setSiteRating(5)" data-val="5" class="site-rv-star text-3xl transition-colors" style="color:#C4957A">★</button>
+          <button type="button" onclick="setSiteRating(4)" data-val="4" class="site-rv-star text-3xl transition-colors" style="color:#C4957A">★</button>
+          <button type="button" onclick="setSiteRating(3)" data-val="3" class="site-rv-star text-3xl transition-colors" style="color:#C4957A">★</button>
+          <button type="button" onclick="setSiteRating(2)" data-val="2" class="site-rv-star text-3xl transition-colors" style="color:#E8D5C8">★</button>
+          <button type="button" onclick="setSiteRating(1)" data-val="1" class="site-rv-star text-3xl transition-colors" style="color:#E8D5C8">★</button>
+        </div>
+      </div>
+
+      <!-- Name -->
+      <div>
+        <label class="block text-sm font-medium mb-1.5">השם שלך</label>
+        <input id="site-rv-name" type="text" placeholder="למשל: שירה ל."
+          class="w-full border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent transition-colors">
+      </div>
+
+      <!-- Text -->
+      <div>
+        <label class="block text-sm font-medium mb-1.5">הביקורת שלך</label>
+        <textarea id="site-rv-text" rows="4" placeholder="ספרי לנו על החוויה שלך..."
+          class="w-full border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent transition-colors resize-none"></textarea>
+      </div>
+
+      <p id="site-rv-err" class="text-red-500 text-sm hidden"></p>
+
+      <button onclick="submitSiteReview()" id="site-rv-btn"
+        class="btn-ink w-full py-3 rounded-2xl font-bold text-sm">
+        שלחי ביקורת
+      </button>
+      <p class="text-xs text-ink-m text-center">הביקורת תועבר לאישור ותעלה לאתר תוך 24 שעות</p>
+    </div>
+
+    <!-- Thank you state -->
+    <div id="write-review-thanks" class="hidden text-center py-6">
+      <div class="text-4xl mb-3">🎉</div>
+      <h4 class="font-bold text-lg mb-2">תודה!</h4>
+      <p class="text-ink-s text-sm">הביקורת שלך התקבלה. היא תעלה לאתר אחרי אישור קצר.</p>
+      <button onclick="closeWriteReview()" class="btn-ink mt-5 px-8 py-2.5 rounded-2xl font-semibold text-sm">סגור</button>
+    </div>
+  </div>
+</div>
 
 <!-- ░░░ BUNDLES ░░░ -->
 <section class="py-16 bg-surface/40 border-y border-border">
@@ -1489,6 +1553,69 @@
     } catch(e) { /* שומר על הביקורות הסטטיות במקרה של שגיאה */ }
   }
   loadReviewsFromDB();
+
+  /* ── Write review modal ── */
+  let siteRating = 5;
+
+  function openWriteReview() {
+    siteRating = 5;
+    document.getElementById('site-rv-name').value = '';
+    document.getElementById('site-rv-text').value = '';
+    document.getElementById('site-rv-err').classList.add('hidden');
+    document.getElementById('write-review-form').classList.remove('hidden');
+    document.getElementById('write-review-thanks').classList.add('hidden');
+    setSiteRating(5);
+    const modal = document.getElementById('write-review-modal');
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => modal.classList.add('show'));
+  }
+
+  function closeWriteReview() {
+    const modal = document.getElementById('write-review-modal');
+    modal.classList.remove('show');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+  }
+
+  function setSiteRating(val) {
+    siteRating = val;
+    document.querySelectorAll('.site-rv-star').forEach(s => {
+      s.style.color = parseInt(s.dataset.val) <= val ? '#C4957A' : '#E8D5C8';
+    });
+  }
+
+  async function submitSiteReview() {
+    const name = document.getElementById('site-rv-name').value.trim();
+    const text = document.getElementById('site-rv-text').value.trim();
+    const errEl = document.getElementById('site-rv-err');
+    const btn   = document.getElementById('site-rv-btn');
+    if (!name || !text) {
+      errEl.textContent = 'נא למלא שם וטקסט';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    errEl.classList.add('hidden');
+    btn.textContent = 'שולחת...'; btn.disabled = true;
+    try {
+      const res = await fetch(`${SB_URL}/rest/v1/reviews`, {
+        method: 'POST',
+        headers: {
+          'apikey': SB_ANON,
+          'Authorization': `Bearer ${SB_ANON}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ name, text, rating: siteRating, status: 'pending' })
+      });
+      if (!res.ok) throw new Error('שגיאה בשליחה');
+      document.getElementById('write-review-form').classList.add('hidden');
+      document.getElementById('write-review-thanks').classList.remove('hidden');
+    } catch(e) {
+      errEl.textContent = 'משהו השתבש. נסי שוב.';
+      errEl.classList.remove('hidden');
+    } finally {
+      btn.textContent = 'שלחי ביקורת'; btn.disabled = false;
+    }
+  }
 
   /* ── Page view tracking ── */
   (function(){
