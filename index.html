@@ -1526,13 +1526,23 @@
 
   /* ── Load approved reviews ── */
   async function loadReviewsFromDB() {
+    const STATIC = [
+      { name: 'שירה ל.', rating: 5, text: 'היו לי 4 חגורות בארון. מאז שה-ZIVOR הגיעה לא נגעתי באף אחת מהן. פשוט עובדת, בלי שזה עסק.' },
+      { name: 'מיכל כ.', rating: 5, text: 'אחרי ארוחת צהריים בעבודה לחצתי על הבאקל, שחררתי קצת, ואף אחד שם לב. שם הבנתי שזה שונה.' },
+      { name: 'נועה א.', rating: 5, text: 'ממש לא האמנתי שזה ישנה. אבל זו חגורה שעובדת לפי הגוף שלך. לא הפוך. זה הכל.' },
+    ];
     try {
       const res = await fetch(
         `${SB_URL}/rest/v1/reviews?status=eq.approved&order=created_at.desc&limit=6&select=name,text,rating`,
         { headers: { 'apikey': SB_ANON, 'Authorization': `Bearer ${SB_ANON}` } }
       );
-      const reviews = await res.json();
-      if (!reviews?.length) return;
+      const dbReviews = await res.json();
+      const reviews = [...(dbReviews || [])];
+      // ממלאים עד 3 עם סטטיות אם אין מספיק
+      if (reviews.length < 3) {
+        const needed = 3 - reviews.length;
+        reviews.push(...STATIC.slice(0, needed));
+      }
       const grid = document.getElementById('reviews-grid');
       const colors = ['#F2DDD1','#EDD9CA','#E8C5B0','#F2DDD1','#EDD9CA','#E8C5B0'];
       grid.innerHTML = reviews.map((r, i) => `
