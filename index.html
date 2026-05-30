@@ -1540,8 +1540,14 @@
         { headers: { 'apikey': SB_ANON, 'Authorization': `Bearer ${SB_ANON}` } }
       );
       const dbReviews = await res.json();
-      // אם אין כלום ב-DB, מציגים את 3 הסטטיות. אחרת רק DB
-      const reviews = (dbReviews?.length) ? dbReviews : STATIC;
+      const reviews = Array.isArray(dbReviews) ? [...dbReviews] : [];
+      if (reviews.length < 3) {
+        const usedNames = new Set(reviews.map(r => r.name));
+        for (const s of STATIC) {
+          if (reviews.length >= 3) break;
+          if (!usedNames.has(s.name)) reviews.push(s);
+        }
+      }
       const grid = document.getElementById('reviews-grid');
       const colors = ['#F2DDD1','#EDD9CA','#E8C5B0','#F2DDD1','#EDD9CA','#E8C5B0'];
       grid.innerHTML = reviews.map((r, i) => `
